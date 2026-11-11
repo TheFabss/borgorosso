@@ -230,18 +230,11 @@
     return m ? m[1] : '';
   }
 
-  /* La mesa llega por el QR (carta.html?mesa=N) y este teléfono la recuerda unas horas. */
-  const CLAVE_MESA = 'borgorosso_mesa';
-  const HORAS_MESA = 4;
-  function mesaActual() {
-    const delQR = numeroMesa(new URLSearchParams(location.search).get('mesa') || '');
-    if (delQR) {
-      almacen.guardar(CLAVE_MESA, { numero: delQR, guardada: Date.now() });
-      return delQR;
-    }
-    const guardada = almacen.leer(CLAVE_MESA, null);
-    return guardada && Date.now() - guardada.guardada < HORAS_MESA * 3600000 ? guardada.numero : '';
-  }
+  /* La mesa sale solo del enlace del QR (carta.html?mesa=N). Quien entra a la carta
+     desde la web está en modo delivery, aunque antes haya escaneado una mesa. */
+  const CLAVE_MESA = 'borgorosso_mesa'; // versiones anteriores la guardaban; se limpia al cargar
+  almacen.borrar(CLAVE_MESA);
+  const mesaActual = () => numeroMesa(new URLSearchParams(location.search).get('mesa') || '');
 
   const olvidarMesa = () => almacen.borrar(CLAVE_MESA);
 
