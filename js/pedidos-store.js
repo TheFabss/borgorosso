@@ -9,7 +9,7 @@
   'use strict';
 
   const CLAVE = 'borgorosso_comandas';
-  const ESTADOS = ['nuevo', 'preparando', 'listo', 'entregado'];
+  const ESTADOS = ['por_confirmar', 'nuevo', 'preparando', 'listo', 'entregado'];
   const oyentes = new Set();
 
   function leer() {
@@ -51,7 +51,7 @@
       items,
       notas,
       total: items.reduce((suma, i) => suma + i.precio * i.cantidad, 0),
-      estado: 'nuevo',
+      estado: 'por_confirmar',
       pago: { estado: 'pendiente', metodo: '', solicitaCaja: false },
       creado: new Date().toISOString()
     };
@@ -72,6 +72,10 @@
       const anterior = ESTADOS[ESTADOS.indexOf(p.estado) - 1];
       return anterior ? { ...p, estado: anterior } : p;
     });
+  }
+
+  async function rechazar(id) {
+    modificar([id], (p) => ({ ...p, estado: 'rechazado' }));
   }
 
   async function pagar(ids, metodo) {
@@ -95,7 +99,7 @@
   const pagarEnLinea = (ids) => pagar(ids, 'en_linea');
 
   window.BorgoPedidos = {
-    ESTADOS, crear, avanzar, retroceder, pagar, pagarEnLinea, solicitarCaja, suscribir, esc,
+    ESTADOS, crear, avanzar, retroceder, rechazar, pagar, pagarEnLinea, solicitarCaja, suscribir, esc,
     remoto: false,
     suscribirCliente: suscribir,
     refrescar: async () => avisar()

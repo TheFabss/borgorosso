@@ -508,7 +508,7 @@
       if (ctx.desdeCarrito) B.vaciarCarrito();
       B.guardarEnHistorial('pedido', { ticket: `#${pedido.numero}`, modalidad: 'En mesa', mesa: ctx.mesa, ubicacion: '', detalle: ctx.detalle, total: pedido.total, notas });
       bot([
-        `✅ ¡Listo, ${nombre}! Tu pedido **#${pedido.numero}** ya llegó a cocina.`,
+        `✅ ¡Listo, ${nombre}! Tu pedido **#${pedido.numero}** llegó a cocina. Un mozo confirmará tu mesa en un momento.`,
         `Mesa: ${B.numeroMesa(ctx.mesa)}`,
         ...ctx.detalle.map((linea) => `• ${linea}`),
         `Total: S/ ${pedido.total}`,

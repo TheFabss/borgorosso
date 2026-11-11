@@ -19,7 +19,7 @@
     ].join('');
 
     const grupos = new Map();
-    pedidos.filter((p) => p.pago.estado === 'pendiente').forEach((p) => {
+    pedidos.filter((p) => p.pago.estado === 'pendiente' && p.estado !== 'por_confirmar' && p.estado !== 'rechazado').forEach((p) => {
       grupos.set(p.lugar, [...(grupos.get(p.lugar) || []), p]);
     });
 

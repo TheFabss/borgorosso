@@ -181,3 +181,14 @@
 .qr-aviso[role="alert"] { border-left-color: var(--op-vino); background: rgba(110, 20, 20, .08); color: var(--op-vino); font-weight: 600; }
 .qr-destino { display: block; margin-top: .45rem; font-size: .7rem; color: var(--op-suave); word-break: break-all; }
 @media print { .qr-destino { color: #555; } }
+
+/* ---------- Confirmación de pedidos ---------- */
+.coc-columnas { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .coc-columnas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .coc-columnas { grid-template-columns: 1fr; } }
+.coc-columna--confirmar { padding: .7rem; border: 2px dashed var(--op-ambar); border-radius: 14px; background: rgba(224, 138, 30, .08); }
+.coc-verificar { margin: .5rem 0 0; font-size: .82rem; font-weight: 700; color: var(--op-ambar); }
+.per-boton--rechazo { border-color: var(--op-rojo); color: var(--op-rojo); }
+.seg-estado { margin: .7rem 0 0; padding: .6rem .8rem; border-radius: 10px; background: rgba(224, 138, 30, .12); color: #8A4B00; font-weight: 600; font-size: .9rem; }
+.seg-estado--rechazo { background: rgba(110, 20, 20, .1); color: var(--op-vino); }
+.seg-pedido.is-rechazado { opacity: .75; }

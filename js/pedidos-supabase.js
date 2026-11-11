@@ -112,6 +112,11 @@
     await refrescar();
   }
 
+  async function rechazar(id) {
+    comprobar(await db.from('pedidos').update({ estado: 'rechazado' }).eq('id', id));
+    await refrescar();
+  }
+
   async function pagar(ids, metodo) {
     comprobar(await db.from('pedidos')
       .update({ pago_estado: 'pagado', pago_metodo: metodo, solicita_caja: false })
@@ -150,6 +155,7 @@
     crear,
     avanzar,
     retroceder,
+    rechazar,
     pagar,
     pagarEnLinea,
     solicitarCaja,

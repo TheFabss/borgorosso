@@ -8,7 +8,7 @@
   const P = window.BorgoPedidos;
   const esc = P.esc;
   const MINUTOS_TARDE = 15;
-  const ACCIONES = { nuevo: 'Empezar', preparando: 'Marcar listo', listo: 'Entregado' };
+  const ACCIONES = { por_confirmar: 'Aceptar', nuevo: 'Empezar', preparando: 'Marcar listo', listo: 'Entregado' };
 
   const botonSonido = document.getElementById('coc-sonido');
   let audio = null;
@@ -35,20 +35,23 @@
       <div class="coc-tarjeta__cabeza"><span class="coc-lugar">${esc(p.lugar)}</span><span class="coc-tiempo">${minutos} min</span></div>
       <ul>${p.items.map((i) => `<li><strong>${i.cantidad} ×</strong> ${esc(i.nombre)}${i.variante ? ` (${esc(i.variante)})` : ''}</li>`).join('')}</ul>
       ${p.notas ? `<p class="coc-notas">${esc(p.notas)}</p>` : ''}
+      ${p.estado === 'por_confirmar' ? '<p class="coc-verificar">Antes de aceptar, un mozo confirma que hay personas en la mesa.</p>' : ''}
       <div class="coc-pie">
         <span class="coc-sello${pagado ? ' is-pagado' : ''}">#${p.numero} · ${pagado ? 'Pagado' : 'Por cobrar'}</span>
-        <span class="coc-acciones">${p.estado === 'nuevo' ? '' : `<button type="button" class="per-boton" data-retroceder="${p.id}">Atrás</button>`}<button type="button" class="per-boton per-boton--lleno" data-avanzar="${p.id}">${ACCIONES[p.estado]}</button></span>
+        <span class="coc-acciones">${p.estado === 'por_confirmar'
+          ? `<button type="button" class="per-boton per-boton--rechazo" data-rechazar="${p.id}">Rechazar</button>`
+          : `<button type="button" class="per-boton" data-retroceder="${p.id}">Atrás</button>`}<button type="button" class="per-boton per-boton--lleno" data-avanzar="${p.id}">${ACCIONES[p.estado]}</button></span>
       </div>
     </article>`;
   }
 
   function pintar() {
-    const activos = pedidos.filter((p) => p.estado !== 'entregado');
+    const activos = pedidos.filter((p) => p.estado !== 'entregado' && p.estado !== 'rechazado');
     const nuevos = new Set(conocidos ? activos.filter((p) => !conocidos.has(p.id)).map((p) => p.id) : []);
     if (nuevos.size) campana();
     conocidos = new Set(pedidos.map((p) => p.id));
 
-    ['nuevo', 'preparando', 'listo'].forEach((estado) => {
+    ['por_confirmar', 'nuevo', 'preparando', 'listo'].forEach((estado) => {
       const grupo = activos.filter((p) => p.estado === estado);
       document.getElementById(`n-${estado}`).textContent = grupo.length;
       document.getElementById(`col-${estado}`).innerHTML = grupo.length
@@ -58,6 +61,18 @@
   }
 
   document.querySelector('.coc-columnas').addEventListener('click', (e) => {
+    const rechazo = e.target.closest('[data-rechazar]');
+    if (rechazo) {
+      /* Rechazar exige un segundo toque: evita descartar un pedido real por error. */
+      if (!rechazo.dataset.armado) {
+        rechazo.dataset.armado = '1';
+        rechazo.textContent = '¿Rechazar? Toca otra vez';
+        setTimeout(() => { rechazo.textContent = 'Rechazar'; delete rechazo.dataset.armado; }, 4000);
+        return;
+      }
+      P.rechazar(rechazo.dataset.rechazar).catch(() => window.alert('No se pudo rechazar. Revisa la conexión o que el SQL 04 esté ejecutado en Supabase.'));
+      return;
+    }
     const atras = e.target.closest('[data-retroceder]');
     if (atras) P.retroceder(atras.dataset.retroceder).catch(() => window.alert('No se pudo guardar el cambio. Revisa la conexión.'));
     const boton = e.target.closest('[data-avanzar]');

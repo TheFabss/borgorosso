@@ -11,7 +11,9 @@
   const esc = P.esc;
   const CLAVE_MIOS = 'borgorosso_mesa_pedidos';
   const HORAS_CUENTA = 8;
-  const NOMBRES_ESTADO = ['Recibido', 'En cocina', 'Listo', 'Servido'];
+  const NOMBRES_ESTADO = ['Confirmado', 'En cocina', 'Listo', 'Servido'];
+  const PASOS = ['nuevo', 'preparando', 'listo', 'entregado'];
+  const cobrable = (p) => p.pago.estado === 'pendiente' && p.estado !== 'por_confirmar' && p.estado !== 'rechazado';
 
   const mesa = (new URLSearchParams(location.search).get('mesa') || '').replace(/\D/g, '').slice(0, 3);
   /* La carta es una sola para todos: esta página solo muestra "Mi pedido y cuenta". */
@@ -117,27 +119,36 @@
       ultimoSeguimiento = vacio;
       return;
     }
-    const pendientes = mios.filter((p) => p.pago.estado === 'pendiente');
+    const pendientes = mios.filter(cobrable);
+    const esperando = mios.some((p) => p.estado === 'por_confirmar');
     const porPagar = pendientes.reduce((s, p) => s + p.total, 0);
     const pidioCaja = pendientes.length && pendientes.every((p) => p.pago.solicitaCaja);
 
     const tarjetas = mios.map((p) => {
-      const actual = P.ESTADOS.indexOf(p.estado);
-      return `<article class="seg-pedido">
+      const actual = PASOS.indexOf(p.estado);
+      const estado = p.estado === 'rechazado'
+        ? '<p class="seg-estado seg-estado--rechazo">No pudimos confirmar tu mesa y el pedido fue cancelado. Llama a un mozo si sigues aquí.</p>'
+        : p.estado === 'por_confirmar'
+          ? '<p class="seg-estado">Esperando confirmación: un mozo verificará tu mesa en un momento.</p>'
+          : `<ol class="seg-pasos">${NOMBRES_ESTADO.map((n, idx) => `<li class="${idx <= actual ? 'is-hecho' : ''}">${n}</li>`).join('')}</ol>`;
+      return `<article class="seg-pedido${p.estado === 'rechazado' ? ' is-rechazado' : ''}">
         <div class="seg-pedido__cabeza"><span>Pedido #${p.numero}</span><span>S/ ${p.total}</span></div>
         <ul>${p.items.map((i) => `<li>${i.cantidad} × ${esc(i.nombre)}${i.variante ? ` (${esc(i.variante)})` : ''}</li>`).join('')}</ul>
-        <ol class="seg-pasos">${NOMBRES_ESTADO.map((n, idx) => `<li class="${idx <= actual ? 'is-hecho' : ''}">${n}</li>`).join('')}</ol>
+        ${estado}
       </article>`;
     }).join('');
 
-    let cuenta = '<p><strong>Cuenta pagada.</strong> ¡Gracias por visitarnos!</p>';
+    let cuenta = esperando
+      ? '<p>La cuenta se habilita cuando confirmemos tu pedido.</p>'
+      : '<p><strong>Cuenta pagada.</strong> ¡Gracias por visitarnos!</p>';
+    if (mios.every((p) => p.estado === 'rechazado')) cuenta = '<p>No tienes pedidos por pagar.</p>';
     if (pendientes.length) {
       cuenta = `<p class="cli-total"><span>Por pagar</span><span>S/ ${porPagar}</span></p>
         ${pidioCaja ? '<p>Avisamos a caja: puedes pagar al salir o te llevamos la cuenta.</p>' : ''}
         <button type="button" class="cli-accion" id="btn-pagar">Pagar en línea</button>
         ${pidioCaja ? '' : '<button type="button" class="cli-accion cli-accion--sec" id="btn-caja">Pagaré en caja</button>'}`;
     }
-    const aviso = recienEnviado ? `<p class="seg-aviso">Tu pedido #${recienEnviado} ya llegó a cocina.</p>` : '';
+    const aviso = recienEnviado ? `<p class="seg-aviso">Tu pedido #${recienEnviado} llegó a cocina. Un mozo confirmará tu mesa en un momento.</p>` : '';
     const html = `<h1>Mi pedido</h1>${aviso}${tarjetas}<section class="seg-cuenta">${cuenta}</section>`;
     /* El sondeo no debe repintar ni reanunciar si nada cambió. */
     if (html !== ultimoSeguimiento) contenedor.innerHTML = html;
@@ -156,7 +167,7 @@
     window.scrollTo(0, 0);
   }
 
-  const idsPendientes = () => misPedidos().filter((p) => p.pago.estado === 'pendiente').map((p) => p.token || p.id);
+  const idsPendientes = () => misPedidos().filter(cobrable).map((p) => p.token || p.id);
 
   const avisarFallo = () => window.alert('No pudimos registrar tu solicitud. Revisa tu conexión e inténtalo de nuevo.');
 
@@ -241,7 +252,7 @@
   $('vista-seguimiento').addEventListener('click', (e) => {
     if (e.target.id === 'btn-caja') P.solicitarCaja(idsPendientes()).catch(avisarFallo);
     if (e.target.id === 'btn-pagar') {
-      $('pago-total').textContent = `S/ ${misPedidos().filter((p) => p.pago.estado === 'pendiente').reduce((s, p) => s + p.total, 0)}`;
+      $('pago-total').textContent = `S/ ${misPedidos().filter(cobrable).reduce((s, p) => s + p.total, 0)}`;
       $('hoja-pago').showModal();
     }
   });

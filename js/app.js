@@ -1106,7 +1106,7 @@
           total = pedido.total;
           url = seguimiento;
           etiqueta = 'Ver mi pedido y pagar';
-          modalidad = 'En mesa · ya llegó a cocina';
+          modalidad = 'En mesa · un mozo confirmará tu mesa';
           filas = [['Mesa', numeroMesa(mesa)]];
           guardarEnHistorial('pedido', { ticket, modalidad, mesa, ubicacion: '', detalle, total, notas });
         } catch {
