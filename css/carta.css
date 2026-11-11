@@ -1022,3 +1022,19 @@ html:has(.pagina-carta), .pagina-carta { overflow-x: clip; }
 .capitulo-hoja__nombre { font: 600 1.05rem/1.2 'Playfair Display', serif; }
 .capitulo-hoja__cuenta { font-size: .8rem; color: #6b5233; }
 @media (prefers-reduced-motion: reduce) { .capitulo-hoja[open] { animation: none; } }
+
+/* ---------- Comanda: modo fijo según cómo se entró a la carta ---------- */
+.modo-cambiar {
+  display: inline-block;
+  min-height: 44px;
+  margin: 0 0 .4rem;
+  padding: .5rem 0;
+  border: 0;
+  background: none;
+  color: #8E1B1B;
+  font: 600 .85rem 'Plus Jakarta Sans', sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.modo-nota { margin: 0 0 .5rem; font-size: .85rem; color: #6b5233; }

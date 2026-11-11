@@ -257,7 +257,7 @@
         return [{ label: 'Sí, quiero comenzar', valor: 'si' }];
       case E.MENU:
         return [
-          { label: 'Delivery / Para llevar', valor: '1' },
+          { label: B.mesaActual() ? `Pedir a la Mesa ${B.mesaActual()}` : 'Delivery / Para llevar', valor: '1' },
           { label: 'En mesa / Reservar', valor: '2' },
           { label: 'Preguntas frecuentes', valor: '3' },
           { label: 'Otra persona', valor: '4' }
@@ -382,7 +382,8 @@
   function mostrarMenu() {
     sesion.estado = E.MENU;
     sesion.ctx = {};
-    bot(`¿En qué te ayudo hoy, ${nombreCliente()}?\n\n**Pedidos y reservas**\n1. Delivery o para llevar\n2. Pedir en mesa o reservar\n\n**Dudas**\n3. Ubicación, horarios, comida, ambiente, eventos y pagos\n\n4. Soy otra persona\n\nTambién puedes escribirme tu duda directamente.`);
+    const mesa = B.mesaActual();
+    bot(`¿En qué te ayudo hoy, ${nombreCliente()}?\n\n**Pedidos y reservas**\n1. ${mesa ? `Pedir a mi mesa (Mesa ${mesa})` : 'Delivery o para llevar'}\n2. Pedir en mesa o reservar\n\n**Dudas**\n3. Ubicación, horarios, comida, ambiente, eventos y pagos\n\n4. Soy otra persona\n\nTambién puedes escribirme tu duda directamente.`);
   }
 
   function reiniciarFlujo() {
@@ -424,13 +425,15 @@
 
   /* ---------- Área A: pedidos y reservas ---------- */
   function iniciarPedido() {
-    sesion.ctx = { tipo: null, detalle: [], total: null };
-    sesion.estado = E.PEDIDO_MODALIDAD;
-    const aviso = B.deliveryDisponible() ? '' : '\n\n🛵 El delivery sale a partir de las 12:00 PM.';
-    bot(`🍽️ ¿Cómo deseas tu pedido?\n\n1. Para disfrutar en la casona (In Situ)\n2. Delivery / Para llevar${aviso}`);
+    return iniciarDelivery();
   }
 
   function iniciarDelivery() {
+    const mesa = B.mesaActual();
+    if (mesa) {
+      sesion.ctx = { tipo: 'insitu', detalle: [], total: null };
+      return pedirPlatos(`Estás en la **Mesa ${mesa}**: tu pedido va directo a cocina.`);
+    }
     if (!B.deliveryDisponible()) {
       sesion.estado = E.MENU;
       return bot('🛵 Nuestros pedidos por Delivery salen a partir del mediodía (12:00 PM). Mientras tanto puedes pedir en mesa, reservar o resolver tus dudas.');
@@ -449,6 +452,9 @@
   function elegirMesaReserva(t) {
     if (t === '3' || /banquete|cotiz/.test(t)) return iniciarBanquete();
     if (t === '1' || /estoy|mi mesa|situ|ahora/.test(t)) {
+      if (!B.mesaActual()) {
+        return bot('Para pedir a tu mesa, escanea el código QR que está en ella: así sabemos a qué mesa llevarlo. Desde aquí puedes pedir delivery o reservar.');
+      }
       sesion.ctx = { tipo: 'insitu', detalle: [], total: null };
       return pedirPlatos();
     }

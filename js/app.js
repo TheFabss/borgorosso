@@ -243,6 +243,8 @@
     return guardada && Date.now() - guardada.guardada < HORAS_MESA * 3600000 ? guardada.numero : '';
   }
 
+  const olvidarMesa = () => almacen.borrar(CLAVE_MESA);
+
   async function enviarACocina({ mesa, cliente, items, notas = '' }) {
     const numero = numeroMesa(mesa);
     const pedido = await window.BorgoPedidos.crear({
@@ -1005,6 +1007,24 @@
         `<p class="pliego__mesa">Estás en la <strong>Mesa ${mesaQR}</strong>. Tu pedido llega directo a cocina.</p>`);
     }
 
+    /* Regla: con QR se pide a esa mesa; desde la web (sin QR) solo delivery. */
+    const opcion = (valor) => form.querySelector(`input[name="modalidad"][value="${valor}"]`);
+    const modoFijo = mesaQR ? 'insitu' : 'delivery';
+    const leyenda = form.querySelector('.modos legend');
+    opcion(mesaQR ? 'delivery' : 'insitu').closest('.modo').hidden = true;
+    opcion(modoFijo).checked = true;
+    if (mesaQR) {
+      leyenda.textContent = `Pedido para la Mesa ${mesaQR}`;
+      leyenda.insertAdjacentHTML('afterend', '<button type="button" class="modo-cambiar" data-olvidar-mesa>¿Ya no estás en la casona? Pedir delivery</button>');
+      form.querySelector('[data-olvidar-mesa]').addEventListener('click', () => {
+        olvidarMesa();
+        location.href = 'carta.html';
+      });
+    } else {
+      leyenda.textContent = 'Pedido a domicilio';
+      leyenda.insertAdjacentHTML('afterend', '<p class="modo-nota">¿Estás en la casona? Escanea el QR de tu mesa para pedir desde ella.</p>');
+    }
+
 
     const actualizarModalidad = () => {
       const modo = form.elements.modalidad.value;
@@ -1097,6 +1117,7 @@
       guardarCarrito([]);
       form.reset();
       if (mesaQR) form.elements.mesa.value = mesaQR;
+      opcion(modoFijo).checked = true;
       ubicacionGPS = null;
       gpsInfo.textContent = '';
       actualizarModalidad();
@@ -1230,7 +1251,7 @@
     obtenerUbicacion,
     getClienteActivo, identificarCliente, cerrarSesionCliente, guardarEnHistorial,
     waLink, textoPedido, textoReserva, textoBanquete,
-    numeroMesa, mesaActual, enviarACocina, vaciarCarrito: () => guardarCarrito([]),
+    numeroMesa, mesaActual, olvidarMesa, enviarACocina, vaciarCarrito: () => guardarCarrito([]),
     abrirReserva, abrirCarrito, cerrarCarrito, toast
   };
 
