@@ -192,3 +192,5 @@
 .seg-estado { margin: .7rem 0 0; padding: .6rem .8rem; border-radius: 10px; background: rgba(224, 138, 30, .12); color: #8A4B00; font-weight: 600; font-size: .9rem; }
 .seg-estado--rechazo { background: rgba(110, 20, 20, .1); color: var(--op-vino); }
 .seg-pedido.is-rechazado { opacity: .75; }
+/* Volver a la carta desde Mi pedido */
+.cli-pedir-mas { display: flex; align-items: center; justify-content: center; margin-top: 1rem; text-decoration: none; }

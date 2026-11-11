@@ -114,7 +114,7 @@
     const mios = misPedidos();
     const contenedor = $('vista-seguimiento');
     if (!mios.length) {
-      const vacio = '<p class="cli-vacio">Aún no has enviado pedidos. Elige tus platos en la carta.</p>';
+      const vacio = `<p class="cli-vacio">Aún no has enviado pedidos. Elige tus platos en la carta.</p><a class="cli-accion cli-pedir-mas" href="${aCarta}">Ver la carta</a>`;
       if (ultimoSeguimiento !== vacio) contenedor.innerHTML = vacio;
       ultimoSeguimiento = vacio;
       return;
@@ -149,7 +149,9 @@
         ${pidioCaja ? '' : '<button type="button" class="cli-accion cli-accion--sec" id="btn-caja">Pagaré en caja</button>'}`;
     }
     const aviso = recienEnviado ? `<p class="seg-aviso">Tu pedido #${recienEnviado} llegó a cocina. Un mozo confirmará tu mesa en un momento.</p>` : '';
-    const html = `<h1>Mi pedido</h1>${aviso}${tarjetas}<section class="seg-cuenta">${cuenta}</section>`;
+    /* Pedir más siempre está a la vista: volver a la carta con la misma mesa. */
+    const pedirMas = `<a class="cli-accion cli-pedir-mas" href="${aCarta}">Pedir algo más</a>`;
+    const html = `<h1>Mi pedido</h1>${aviso}${tarjetas}<section class="seg-cuenta">${cuenta}</section>${pedirMas}`;
     /* El sondeo no debe repintar ni reanunciar si nada cambió. */
     if (html !== ultimoSeguimiento) contenedor.innerHTML = html;
     ultimoSeguimiento = html;
