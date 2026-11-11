@@ -1,0 +1,183 @@
+/* =========================================================
+   BORGOROSSO · operacion.css
+   Pedido por QR (cliente), cocina, caja y hoja de QR.
+   ========================================================= */
+:root {
+  --op-crema: #FAF6F0;
+  --op-papel: #F2ECE1;
+  --op-vino: #6E1414;
+  --op-oro: #C5A059;
+  --op-tinta: #2B1810;
+  --op-suave: #6B5B52;
+  --op-linea: rgba(74, 53, 37, .18);
+  --op-verde: #3A5A40;
+  --op-noche: #16110F;
+  --op-panel: #241B17;
+  --op-claro: #F5EFE6;
+  --op-ambar: #E08A1E;
+  --op-rojo: #D9483B;
+}
+.op, .op * { box-sizing: border-box; }
+.op { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+.op [hidden] { display: none !important; }
+.op button { font: inherit; cursor: pointer; }
+.op h1, .op h2, .op h3 { font-family: 'Playfair Display', Georgia, serif; margin: 0; }
+.op :focus-visible { outline: 2px solid var(--op-oro); outline-offset: 2px; }
+.op-marca { font: 700 1rem/1 'Cinzel', serif; letter-spacing: .14em; }
+
+/* ---------- Cliente: pedido en mesa ---------- */
+.op--cliente { background: var(--op-crema); color: var(--op-tinta); padding-bottom: 8.5rem; }
+.cli-cabecera {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .85rem 1rem; color: var(--op-claro); background: var(--op-vino);
+}
+.cli-lugar { padding: .4rem .8rem; border: 1px solid var(--op-oro); border-radius: 999px; font-size: .85rem; font-weight: 700; color: #F0DCA6; }
+.cli-tabs {
+  position: sticky; top: 50px; z-index: 19;
+  display: flex; gap: .4rem; overflow-x: auto; padding: .7rem 1rem;
+  background: var(--op-crema); border-bottom: 1px solid var(--op-linea); scrollbar-width: none;
+}
+.cli-tab { flex: 0 0 auto; min-height: 40px; padding: 0 .95rem; border: 1px solid var(--op-linea); border-radius: 999px; background: transparent; color: var(--op-tinta); font-weight: 600; font-size: .88rem; }
+.cli-tab[aria-pressed="true"] { background: var(--op-vino); border-color: var(--op-vino); color: #fff; }
+.cli-contenido { max-width: 640px; margin: 0 auto; padding: .4rem 1rem; }
+.cli-plato { display: grid; gap: .25rem; padding: 1rem 0; border-bottom: 1px solid var(--op-linea); }
+.cli-plato__fila { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+.cli-plato h3 { font-size: 1.1rem; }
+.cli-plato__precio { font-weight: 700; color: var(--op-vino); white-space: nowrap; }
+.cli-plato p { margin: 0; font-size: .86rem; color: var(--op-suave); }
+.cli-plato__botones { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .5rem; }
+.cli-sumar { min-height: 44px; padding: 0 1rem; border: 1px solid var(--op-vino); border-radius: 10px; background: transparent; color: var(--op-vino); font-weight: 700; font-size: .88rem; }
+.cli-sumar:active { background: var(--op-vino); color: #fff; }
+.cli-barra { position: fixed; inset: auto 0 0 0; z-index: 30; background: #fff; border-top: 1px solid var(--op-linea); box-shadow: 0 -10px 24px -18px rgba(0, 0, 0, .5); }
+.cli-ver { display: flex; justify-content: space-between; align-items: center; width: calc(100% - 1.6rem); min-height: 50px; margin: .6rem .8rem 0; padding: 0 1rem; border: 0; border-radius: 12px; background: var(--op-vino); color: #fff; font-weight: 700; }
+.cli-nav { display: grid; grid-template-columns: 1fr 1fr; }
+.cli-nav button { min-height: 50px; border: 0; background: transparent; color: var(--op-suave); font-weight: 600; }
+.cli-nav button[aria-current="page"] { color: var(--op-vino); font-weight: 800; }
+.cli-hoja { width: min(560px, 100%); max-height: 88vh; margin: auto auto 0; padding: 1.2rem 1rem 1.4rem; border: 0; border-radius: 18px 18px 0 0; background: var(--op-crema); color: var(--op-tinta); }
+.cli-hoja--centro { margin: auto; border-radius: 16px; width: min(420px, calc(100% - 2rem)); }
+.cli-hoja::backdrop { background: rgba(22, 17, 15, .6); }
+.cli-hoja__titulo { display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem; }
+.cli-cerrar { width: 44px; height: 44px; border: 0; background: transparent; font-size: 1.2rem; color: var(--op-tinta); }
+.cli-linea { display: flex; justify-content: space-between; align-items: center; gap: .8rem; padding: .55rem 0; border-bottom: 1px dashed var(--op-linea); }
+.cli-linea small { display: block; color: var(--op-suave); }
+.cli-cantidad { display: flex; align-items: center; gap: .3rem; }
+.cli-cantidad button { width: 44px; height: 44px; border: 1px solid var(--op-linea); border-radius: 10px; background: #fff; color: var(--op-vino); font-size: 1.1rem; }
+.cli-cantidad span { min-width: 1.4rem; text-align: center; font-weight: 700; }
+.cli-campo { display: grid; gap: .3rem; margin-top: .9rem; font-size: .82rem; font-weight: 700; }
+.cli-campo input, .cli-campo select { min-height: 46px; padding: 0 .8rem; border: 1px solid var(--op-linea); border-radius: 10px; background: #fff; font: 500 1rem 'Plus Jakarta Sans', sans-serif; color: var(--op-tinta); }
+.cli-total { display: flex; justify-content: space-between; margin: 1rem 0; font-size: 1.15rem; font-weight: 800; }
+.cli-accion { display: block; width: 100%; min-height: 50px; padding: 0 1rem; border: 0; border-radius: 12px; background: var(--op-vino); color: #fff; font-weight: 700; }
+.cli-accion--sec { margin-top: .5rem; border: 1px solid var(--op-vino); background: transparent; color: var(--op-vino); }
+.cli-error { min-height: 1.2rem; margin: .5rem 0 0; color: #A11D1D; font-size: .86rem; font-weight: 600; }
+.cli-demo { margin: 0 0 .9rem; padding: .6rem .8rem; border-left: 3px solid var(--op-ambar); background: rgba(224, 138, 30, .12); font-size: .84rem; }
+.cli-vacio { padding: 3rem 1rem; text-align: center; color: var(--op-suave); }
+.seg-pedido { padding: 1rem; margin-top: .9rem; border: 1px solid var(--op-linea); border-radius: 14px; background: #fff; }
+.seg-pedido__cabeza { display: flex; justify-content: space-between; font-weight: 700; }
+.seg-pedido ul { margin: .5rem 0 .8rem; padding: 0; list-style: none; font-size: .88rem; color: var(--op-suave); }
+.seg-pasos { display: grid; grid-template-columns: repeat(4, 1fr); gap: .25rem; padding: 0; margin: 0; list-style: none; }
+.seg-pasos li { padding-top: .4rem; border-top: 4px solid var(--op-linea); font-size: .72rem; color: var(--op-suave); }
+.seg-pasos li.is-hecho { border-color: var(--op-verde); color: var(--op-verde); font-weight: 700; }
+.seg-cuenta { margin-top: 1.1rem; padding: 1rem; border-radius: 14px; background: var(--op-papel); }
+.seg-cuenta p { margin: 0 0 .7rem; }
+
+/* ---------- Personal: cocina y caja ---------- */
+.op--personal { min-height: 100vh; background: var(--op-noche); color: var(--op-claro); }
+.per-cabecera { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .8rem; padding: .9rem 1.2rem; border-bottom: 1px solid rgba(197, 160, 89, .3); }
+.per-cabecera h1 { font-size: 1.35rem; }
+.per-boton { min-height: 44px; padding: 0 1rem; border: 1px solid var(--op-oro); border-radius: 10px; background: transparent; color: #F0DCA6; font-weight: 700; }
+.per-boton--lleno { border-color: var(--op-oro); background: var(--op-oro); color: #2B1810; }
+.coc-columnas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding: 1rem 1.2rem; align-items: start; }
+.coc-columna h2 { display: flex; justify-content: space-between; margin-bottom: .7rem; font-size: 1.1rem; }
+.coc-tarjeta { margin-bottom: .8rem; padding: 1rem; border-radius: 12px; border-left: 6px solid var(--op-ambar); background: var(--op-panel); }
+.coc-tarjeta.is-tarde { border-left-color: var(--op-rojo); }
+.coc-tarjeta.is-entrando { animation: cocEntrada 1s ease; }
+.coc-tarjeta__cabeza { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; }
+.coc-lugar { font-size: 1.5rem; font-weight: 800; }
+.coc-tiempo { font-weight: 700; font-variant-numeric: tabular-nums; }
+.is-tarde .coc-tiempo { color: #FF8A7D; }
+.coc-tarjeta ul { margin: .6rem 0; padding: 0; list-style: none; font-size: 1.05rem; line-height: 1.5; }
+.coc-notas { margin: 0 0 .7rem; padding: .5rem .7rem; border-radius: 8px; background: rgba(224, 138, 30, .18); color: #FFD08A; font-weight: 600; }
+.coc-pie { display: flex; justify-content: space-between; align-items: center; gap: .7rem; }
+.coc-sello { font-size: .78rem; font-weight: 700; color: #BFB1A5; }
+.coc-sello.is-pagado { color: #8FD19E; }
+.per-vacio { padding: 1.5rem; border: 1px dashed rgba(245, 239, 230, .2); border-radius: 12px; text-align: center; color: #BFB1A5; }
+.caj-contenido { max-width: 900px; margin: 0 auto; padding: 1rem 1.2rem; }
+.caj-resumen { display: flex; flex-wrap: wrap; gap: 1.4rem; margin-bottom: 1.2rem; color: #BFB1A5; }
+.caj-resumen strong { display: block; font-size: 1.4rem; color: var(--op-claro); }
+.caj-cuenta { margin-bottom: .9rem; padding: 1rem; border-radius: 12px; background: var(--op-panel); }
+.caj-cuenta.is-solicita { outline: 2px solid var(--op-ambar); }
+.caj-cuenta__cabeza { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.caj-cuenta__cabeza h2 { font-size: 1.3rem; }
+.caj-total { font-size: 1.4rem; font-weight: 800; }
+.caj-aviso { margin: .3rem 0 0; color: #FFD08A; font-weight: 700; font-size: .88rem; }
+.caj-cuenta ul { margin: .6rem 0; padding: 0; list-style: none; color: #D8CCC0; }
+.caj-metodos { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+.per-login { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 1rem; background: var(--op-noche); }
+.per-login__caja { display: grid; gap: .9rem; width: min(360px, 100%); padding: 1.6rem; border: 1px solid rgba(197, 160, 89, .4); border-radius: 14px; background: var(--op-panel); }
+.per-login__caja label { display: grid; gap: .3rem; font-size: .86rem; font-weight: 700; }
+.per-login__caja input { min-height: 46px; padding: 0 .8rem; border: 1px solid rgba(245, 239, 230, .25); border-radius: 10px; background: var(--op-noche); color: var(--op-claro); font: 500 1rem 'Plus Jakarta Sans', sans-serif; }
+.per-login__error { min-height: 1.2rem; margin: 0; color: #FF8A7D; font-size: .88rem; font-weight: 600; }
+
+/* ---------- Hoja de QR ---------- */
+.op--qr { background: #fff; color: var(--op-tinta); padding: 1.4rem; }
+.qr-controles { display: flex; flex-wrap: wrap; align-items: end; gap: .8rem; margin: .8rem 0 1.2rem; }
+.qr-controles label { display: grid; gap: .25rem; font-size: .84rem; font-weight: 700; }
+.qr-controles input { width: 110px; min-height: 44px; padding: 0 .7rem; font: inherit; }
+.qr-controles .per-boton { color: var(--op-vino); border-color: var(--op-vino); }
+.qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+.qr-tarjeta { padding: 1rem; border: 1px solid var(--op-oro); text-align: center; break-inside: avoid; }
+.qr-tarjeta h2 { margin: .4rem 0; font-size: 1.5rem; color: var(--op-vino); }
+.qr-tarjeta p { margin: .3rem 0 0; font-size: .82rem; }
+.qr-tarjeta svg { width: 100%; max-width: 170px; height: auto; }
+.qr-aviso { padding: .6rem .8rem; border-left: 3px solid var(--op-ambar); background: rgba(224, 138, 30, .12); font-size: .88rem; }
+@media print { .qr-controles, .qr-aviso, .qr-intro { display: none; } }
+
+@media (max-width: 860px) { .coc-columnas { grid-template-columns: 1fr; } }
+@keyframes cocEntrada { from { background: var(--op-ambar); } to { background: var(--op-panel); } }
+@media (prefers-reduced-motion: reduce) { .coc-tarjeta.is-entrando { animation: none; } }
+
+/* ---------- Pulido de interfaz ---------- */
+.op h1, .op h2, .op h3 { text-wrap: balance; }
+.op p { text-wrap: pretty; }
+.cli-plato__precio, .cli-total, .caj-total, .caj-resumen strong, .coc-tiempo { font-variant-numeric: tabular-nums; }
+.cli-sumar:active, .cli-accion:active, .per-boton:active, .cli-cantidad button:active { transform: scale(.96); }
+.cli-sumar, .cli-accion, .per-boton, .cli-cantidad button { transition: transform 150ms ease-out, background-color 150ms ease-out, color 150ms ease-out; }
+
+.seg-aviso { margin: .8rem 0 0; padding: .75rem .9rem; border-radius: 10px; background: rgba(58, 90, 64, .14); color: var(--op-verde); font-weight: 700; }
+.coc-acciones { display: flex; gap: .5rem; }
+
+/* ---------- Navidad en el pedido por QR (solo el cliente; cocina y caja no cambian) ---------- */
+.op--cliente[data-theme="navidad"] .cli-cabecera { background: linear-gradient(135deg, #12301F, #1B4630); }
+.op--cliente[data-theme="navidad"] .cli-cabecera::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% - 6px);
+  height: 24px;
+  background: url("../img_borgorosso/navidad/guirnalda.svg") repeat-x 0 0 / 303px 24px;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .4));
+  pointer-events: none;
+}
+.op--cliente[data-theme="navidad"] .cli-tabs { padding-top: 1.35rem; }
+.op--cliente[data-theme="navidad"] :focus-visible { outline: 3px solid #12301F; }
+.op--cliente[data-theme="navidad"] .cli-cabecera :focus-visible { outline-color: #FFD166; }
+/* Acebo junto a la marca en el pedido por QR */
+.op--cliente[data-theme="navidad"] .op-marca::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: .45rem;
+  vertical-align: -4px;
+  background: url("../img_borgorosso/navidad/acebo.svg") center / contain no-repeat;
+}
+/* ---------- QR: dirección pública y destino visible ---------- */
+.qr-controles .qr-base { flex: 1 1 320px; }
+.qr-controles .qr-base input { width: 100%; }
+.qr-controles .per-boton:disabled { opacity: .45; cursor: not-allowed; }
+.qr-aviso[role="alert"] { border-left-color: var(--op-vino); background: rgba(110, 20, 20, .08); color: var(--op-vino); font-weight: 600; }
+.qr-destino { display: block; margin-top: .45rem; font-size: .7rem; color: var(--op-suave); word-break: break-all; }
+@media print { .qr-destino { color: #555; } }

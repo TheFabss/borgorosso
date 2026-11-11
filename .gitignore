@@ -1,0 +1,14 @@
+# Archivos de herramientas locales: no forman parte de la web
+.impeccable/
+.vscode/
+*.log
+
+# Fotos de referencia: se quedan en la laptop. Solo se publican las que usa la web.
+img_borgorosso/*
+!img_borgorosso/navidad/
+!img_borgorosso/referencia-2026-11/
+img_borgorosso/referencia-2026-11/*
+!img_borgorosso/referencia-2026-11/rincon-arte.jpg
+!img_borgorosso/referencia-2026-11/terraza-galeria.jpg
+!img_borgorosso/Captura de pantalla 2026-10-27 201148.png
+!img_borgorosso/Captura de pantalla 2026-10-27 203304.png

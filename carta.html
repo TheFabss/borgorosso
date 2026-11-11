@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Carta de la Casona · Borgorosso</title>
+  <meta name="description" content="La carta de Borgorosso en Chosica: entrantes, fondos, pizzas a la leña, postres y bebidas. Arma tu comanda In Situ, Delivery o para tu reserva.">
+  <meta name="theme-color" content="#18110E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: { preflight: false },
+      theme: {
+        extend: {
+          colors: {
+            borgo: {
+              crema: '#FAF6F0', papel: '#F7F2E7', vino: '#6E1414', terciopelo: '#5A0E14',
+              olivo: '#3A5A40', oro: '#C5A059', madera: '#4A3525', mesa: '#18110E'
+            }
+          },
+          fontFamily: {
+            titulo: ['Playfair Display', 'serif'],
+            cuerpo: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/carta.css">
+</head>
+<body class="pagina-carta font-cuerpo" data-theme="casona">
+  <script>try{var t=JSON.parse(localStorage.getItem("borgorosso_tema"));document.body.dataset.theme=t==="navidad"?"navidad":"casona"}catch(e){document.body.dataset.theme="casona"}</script>
+
+  <!-- Luz cálida del candelabro sobre la mesa -->
+  <div class="mesa-luz" aria-hidden="true"></div>
+
+  <!-- ============ HUD FLOTANTE ============ -->
+  <a href="index.html" class="hud-volver" data-portal aria-label="Volver a la casona">
+    <span class="hud-volver__sello" aria-hidden="true">B</span>
+    <span class="hud-volver__txt">← Volver<span class="hud-extra"> a la Casona</span></span>
+  </a>
+
+  <div class="hud-derecha">
+  <button type="button" class="tema-switch" data-tema-switch role="switch" aria-checked="false" aria-label="Cambiar a tema Navidad">
+    <span class="tema-switch__opcion tema-switch__opcion--casona"><span class="tema-icono tema-icono--copa" aria-hidden="true"></span><span class="tema-switch__txt"> Clásico</span></span>
+    <span class="tema-switch__pista" aria-hidden="true"><span class="tema-switch__perilla"></span></span>
+    <span class="tema-switch__opcion tema-switch__opcion--navidad"><span class="tema-icono tema-icono--acebo" aria-hidden="true"></span><span class="tema-switch__txt"> Navidad</span></span>
+  </button>
+  <button type="button" class="hud-reservar" data-reservar="regular" aria-label="Reservar una mesa">
+    <svg class="hud-reservar__icono" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span class="hud-reservar__txt">Reservar</span>
+  </button>
+  <button type="button" class="hud-comanda" id="carrito-fab" data-abrir-carrito aria-label="Abrir la comanda de mesa">
+    <svg class="hud-comanda__icono" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M6 3v18M4 7h4M4 12h4M4 17h4M10 8h6M10 12h6M10 16h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+    <span class="hud-comanda__txt">Mi Pedido</span>
+    <span class="hud-comanda__n" data-carrito-cantidad>0</span>
+  </button>
+  </div>
+
+  <div class="escena">
+
+    <!-- ============ ÍNDICE: CAPÍTULOS DE LA OBRA ============ -->
+    <nav class="capitulos" aria-label="Capítulos de la carta">
+      <button type="button" class="capitulo" data-cat="entrantes"><span class="capitulo__num">I.</span><span>Entrantes</span></button>
+      <button type="button" class="capitulo" data-cat="fondos"><span class="capitulo__num">II.</span><span>Fondos</span></button>
+      <button type="button" class="capitulo" data-cat="pizzas"><span class="capitulo__num">III.</span><span>Pizzas a la Leña</span></button>
+      <button type="button" class="capitulo" data-cat="adicionales"><span class="capitulo__num">IV.</span><span>Adicionales</span></button>
+      <button type="button" class="capitulo" data-cat="postres"><span class="capitulo__num">V.</span><span>Postres</span></button>
+      <button type="button" class="capitulo" data-cat="bebidas"><span class="capitulo__num">VI.</span><span>Bebidas</span></button>
+      <button type="button" class="capitulo" data-cat="cocteles"><span class="capitulo__num">VII.</span><span>Cócteles</span></button>
+    </nav>
+
+    <!-- ============ PLIEGO DE PAPEL ALGODÓN ============ -->
+    <main class="pliego" id="pliego">
+      <span class="pliego__halo" aria-hidden="true"></span>
+
+      <svg class="esquina esquina--si" viewBox="0 0 64 64" aria-hidden="true"><use href="#ornamento-esquina"/></svg>
+      <svg class="esquina esquina--sd" viewBox="0 0 64 64" aria-hidden="true"><use href="#ornamento-esquina"/></svg>
+      <svg class="esquina esquina--ii" viewBox="0 0 64 64" aria-hidden="true"><use href="#ornamento-esquina"/></svg>
+      <svg class="esquina esquina--id" viewBox="0 0 64 64" aria-hidden="true"><use href="#ornamento-esquina"/></svg>
+
+      <header class="pliego__cabecera">
+        <p class="pliego__marca">BORGOROSSO</p>
+        <p class="pliego__sub">Carta de la Casona · Chosica</p>
+        <svg class="filete" viewBox="0 0 240 20" aria-hidden="true"><use href="#ornamento-filete"/></svg>
+        <p class="pliego__horario">Horario especial de carta: 12:00 PM a 5:00 PM · La casona atiende de 8:30 AM a 11:00 PM</p>
+      </header>
+
+      <section class="pagina" id="carta-pagina" aria-live="polite">
+        <header class="pagina__titulo">
+          <span class="pagina__num" id="carta-num-cat">I</span>
+          <h1 id="carta-titulo-cat">Entrantes</h1>
+        </header>
+        <div class="destacados" id="carta-destacados"></div>
+        <div class="carta-lista" id="carta-grid"></div>
+      </section>
+
+      <footer class="pliego__pie">
+        <svg class="filete" viewBox="0 0 240 20" aria-hidden="true"><use href="#ornamento-filete"/></svg>
+        <p>Precios en soles. Pregunta a tu mozo por los sabores de temporada.</p>
+        <button type="button" class="btn-oro" data-reservar="regular">Reservar una mesa</button>
+      </footer>
+    </main>
+  </div>
+
+  <!-- ============ COMANDA DE LA CASONA ============ -->
+  <div class="overlay" id="drawer-overlay"></div>
+  <aside class="drawer comanda" id="carrito-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-titulo">
+    <div class="comanda__cuero">
+      <header class="comanda__cabecera">
+        <div>
+          <p class="comanda__sub">Borgorosso · Libreta del maître</p>
+          <h2 id="drawer-titulo">Comanda de Mesa</h2>
+        </div>
+        <button type="button" class="comanda__cerrar" data-cerrar-drawer aria-label="Cerrar comanda">✕</button>
+      </header>
+
+      <div class="comanda__hoja">
+        <ul id="drawer-items"></ul>
+        <p class="comanda__total">Total <strong id="drawer-total">S/ 0</strong></p>
+
+        <form id="pedido-form" novalidate>
+          <fieldset class="modos">
+            <legend>¿Cómo disfrutarás tu pedido?</legend>
+            <label class="modo">
+              <input type="radio" name="modalidad" value="insitu" checked>
+              <span class="modo__icono" aria-hidden="true">🍽️</span>
+              <span class="modo__txt"><strong>Para disfrutar en la Casona</strong><small>In Situ · te lo llevamos a la mesa</small></span>
+            </label>
+            <label class="modo">
+              <input type="radio" name="modalidad" value="delivery">
+              <span class="modo__icono" aria-hidden="true">🛵</span>
+              <span class="modo__txt"><strong>Delivery a domicilio</strong><small>Desde las 12:00 PM · GPS o dirección</small></span>
+            </label>
+          </fieldset>
+
+          <p class="aviso-hora" id="aviso-hora" hidden>El delivery sale a partir de las 12:00 PM. Mientras tanto puedes disfrutarlo en la Casona.</p>
+
+          <label class="campo"><span>A nombre de</span>
+            <input name="nombre" type="text" maxlength="60" autocomplete="name" required></label>
+
+          <div id="bloque-insitu">
+            <label class="campo"><span>Mesa Nº</span>
+              <input name="mesa" type="text" inputmode="numeric" maxlength="3" placeholder="Ej. 5"></label>
+          </div>
+
+          <div id="bloque-delivery" hidden>
+            <label class="campo"><span>Dirección en Chosica</span>
+              <input name="direccion" type="text" maxlength="120" placeholder="Calle, número, referencia"></label>
+            <button type="button" class="boton-gps" id="pedido-gps">📍 Enviar mi ubicación actual (GPS)</button>
+            <p class="nota" id="pedido-gps-info"></p>
+          </div>
+
+          <label class="campo"><span>Indicaciones para cocina</span>
+            <input name="notas" type="text" maxlength="160" placeholder="Alergias, punto de cocción, celebración…"></label>
+
+          <p class="error" id="pedido-error" role="alert"></p>
+          <button type="submit" class="btn-vino w-full">Registrar comanda en mesa</button>
+        </form>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ TICKET ============ -->
+  <div class="modal" id="modal-ticket" role="dialog" aria-modal="true" aria-label="Ticket de la comanda">
+    <div class="modal__panel textura ticket">
+      <button type="button" class="modal__cerrar" data-cerrar-modal aria-label="Cerrar">✕</button>
+      <div id="ticket-contenido"></div>
+    </div>
+  </div>
+
+  <!-- ============ ORNAMENTOS SVG (dorado envejecido) ============ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <g id="ornamento-esquina" fill="none" stroke="currentColor">
+        <path d="M4 60V22C4 12 12 4 22 4h38" stroke-width="1.6"/>
+        <path d="M10 60V26c0-9 7-16 16-16h34" stroke-width=".8"/>
+        <circle cx="21" cy="21" r="3.2" fill="currentColor" stroke="none"/>
+        <path d="M21 21c5-9 14-12 21-8-7 .5-13 3-21 8zM21 21c-9 5-12 14-8 21 .5-7 3-13 8-21z" fill="currentColor" stroke="none" opacity=".85"/>
+        <path d="M30 10c3 2 5 2 8 0M10 30c2 3 2 5 0 8" stroke-width=".9" stroke-linecap="round"/>
+      </g>
+      <g id="ornamento-filete" fill="none" stroke="currentColor">
+        <path d="M4 10h86M150 10h86" stroke-width=".9"/>
+        <path d="M96 10c8-8 16-8 24 0-8 8-16 8-24 0zM120 10c8-8 16-8 24 0-8 8-16 8-24 0z" stroke-width="1.1"/>
+        <circle cx="120" cy="10" r="2.4" fill="currentColor" stroke="none"/>
+      </g>
+    </defs>
+  </svg>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/pedidos-store.js"></script>
+  <script src="js/pedidos-supabase.js"></script>
+  <script src="js/carta-datos.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

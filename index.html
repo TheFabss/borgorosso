@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Borgorosso · Casona Galería en Chosica</title>
+  <meta name="description" content="Borgorosso, restaurante turístico en Chosica (Lima). Cocina criolla, pastas artesanales, horno de leña y galería viva. Abierto todos los días 8:30 AM – 11:00 PM.">
+  <meta name="theme-color" content="#6E1414">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            borgo: {
+              crema: '#FAF6F0', pergamino: '#F2ECE1', vino: '#6E1414', burdeos: '#7A1C1C',
+              olivo: '#3A5A40', oro: '#C5A059', madera: '#4A3525', noche: '#1E202B',
+              ambar: '#E65100', ambar2: '#FF8F00'
+            }
+          },
+          fontFamily: {
+            titulo: ['Playfair Display', 'serif'],
+            cuerpo: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="font-cuerpo" data-theme="casona">
+  <script>try{var t=JSON.parse(localStorage.getItem("borgorosso_tema"));document.body.dataset.theme=t==="navidad"?"navidad":"casona"}catch(e){document.body.dataset.theme="casona"}</script>
+
+  <!-- ============ NAVEGACIÓN ============ -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="index.html" class="logo" aria-label="Borgorosso, inicio">BORGOROSSO<small>RESTAURANTE TURÍSTICO</small></a>
+      <nav class="nav-enlaces" aria-label="Principal">
+        <a href="#experiencia">La Casona</a>
+        <a href="#evento">Eventos &amp; Campañas</a>
+        <a href="#contacto">Contacto</a>
+        <button type="button" class="btn-oro" data-reservar="regular" style="padding:.6rem 1.1rem">Reservar mesa</button>
+      </nav>
+      <div class="header-derecha">
+        <button type="button" class="tema-switch" data-tema-switch role="switch" aria-checked="false" aria-label="Cambiar a tema Navidad">
+          <span class="tema-switch__opcion tema-switch__opcion--casona"><span class="tema-icono tema-icono--copa" aria-hidden="true"></span><span class="tema-switch__txt"> Clásico</span></span>
+          <span class="tema-switch__pista" aria-hidden="true"><span class="tema-switch__perilla"></span></span>
+          <span class="tema-switch__opcion tema-switch__opcion--navidad"><span class="tema-icono tema-icono--acebo" aria-hidden="true"></span><span class="tema-switch__txt"> Navidad</span></span>
+        </button>
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="menu-movil">Menú</button>
+      </div>
+    </div>
+    <div class="menu-movil" id="menu-movil">
+      <a href="#experiencia">La Casona</a>
+      <a href="#evento">Eventos &amp; Campañas</a>
+      <a href="#contacto">Contacto</a>
+      <button type="button" class="btn-vino" data-reservar="regular">Reservar mesa</button>
+    </div>
+  </header>
+
+  <!-- ============ HERO: MARCO ARQUITECTÓNICO ============ -->
+  <section id="hero" class="hero">
+    <div class="hero__foto" aria-hidden="true"></div>
+    <div class="hero__velo" aria-hidden="true"></div>
+    <div class="hero__marco" aria-hidden="true">
+      <svg class="hero__esquina hero__esquina--si" viewBox="0 0 64 64"><use href="#adorno-esquina"/></svg>
+      <svg class="hero__esquina hero__esquina--sd" viewBox="0 0 64 64"><use href="#adorno-esquina"/></svg>
+      <svg class="hero__esquina hero__esquina--ii" viewBox="0 0 64 64"><use href="#adorno-esquina"/></svg>
+      <svg class="hero__esquina hero__esquina--id" viewBox="0 0 64 64"><use href="#adorno-esquina"/></svg>
+    </div>
+
+    <div class="hero__contenido">
+      <p class="eyebrow hero-anim solo-casona">Chosica · Lima · Casona Galería</p>
+      <h1 class="hero-anim solo-casona">Donde el fuego de la leña se encuentra con <em>el arte de sentirse en casa.</em></h1>
+      <h1 class="hero-anim solo-navidad">Esta Navidad, la casona <em>enciende sus velas.</em></h1>
+      <p class="hero__sub hero-anim solo-casona">Cocina criolla, pastas artesanales y galería viva en el corazón de Chosica</p>
+      <p class="hero__sub hero-anim solo-navidad">Salón y terraza vestidos de Navidad, cenas de diciembre y banquetes para tu reunión de fin de año.</p>
+      <div class="hero__ctas hero-anim solo-navidad">
+        <button type="button" class="btn-vino" data-reservar="navidad">Reserva tu mesa de Navidad</button>
+        <a class="btn-fantasma" href="carta.html" data-portal>Ver la carta</a>
+        <button type="button" class="btn-fantasma" data-reservar="banquete">Cotizar cena de fin de año</button>
+      </div>
+      <div class="hero__ctas hero-anim solo-casona">
+        <a class="btn-vino" href="carta.html" data-portal>Descubrir la Carta</a>
+        <button type="button" class="btn-fantasma hero__reservar" data-reservar="regular">Reservar mesa</button>
+        <button type="button" class="btn-fantasma" data-chat-open>Pedir con el Asistente</button>
+      </div>
+      <p class="hero__ubicacion hero-anim">Todos los días · 8:30 AM – 11:00 PM</p>
+    </div>
+    <span class="scroll-pista" aria-hidden="true"></span>
+  </section>
+
+  <!-- ============ EXPERIENCIA: COLLAGE DE GALERÍA ============ -->
+  <section id="experiencia" class="seccion experiencia">
+    <div class="contenedor">
+      <div class="encabezado-seccion reveal">
+        <p class="eyebrow">La Experiencia Borgorosso</p>
+        <h2 class="titulo solo-casona">Un refugio secreto en Chosica</h2>
+        <h2 class="titulo solo-navidad">La casona se viste de Navidad</h2>
+        <p class="texto-suave solo-navidad">El salón y la terraza lucen sus adornos de diciembre entre pinturas, candelabros y el aroma a leña.</p>
+        <p class="texto-suave solo-casona">Cruza el arco de piedra y las cortinas burdeos: arte en las paredes, chimenea blanca, muebles de madera antigua y una terraza florida con aroma a leña.</p>
+        <div class="linea-oro"></div>
+      </div>
+
+      <div class="collage">
+        <figure class="cuadro reveal">
+          <p class="cuadro__etiqueta"><b>01</b> / Galería viva</p>
+          <div class="cuadro__marco">
+            <div class="cuadro__paspartu">
+              <div class="cuadro__visor">
+                <img src="img_borgorosso/referencia-2026-11/rincon-arte.jpg" alt="Rincón interior con candelabro de cristal, cuadros antiguos y banca de madera tallada" loading="lazy" style="object-position:50% 45%">
+                <p class="cuadro__historia"><span>La historia del rincón</span>Entre candelabros y muebles antiguos, cada pared del salón cuelga una historia.</p>
+              </div>
+            </div>
+          </div>
+          <figcaption>
+            <h3 class="titulo">El Salón &amp; Galería de Arte</h3>
+            <p>Interior vintage con candelabros de cristal, cortinas burdeos y pinturas en cada pared.</p>
+          </figcaption>
+        </figure>
+
+        <figure class="cuadro cuadro--centro reveal">
+          <p class="cuadro__etiqueta"><b>02</b> / Jardín secreto</p>
+          <div class="cuadro__marco">
+            <div class="cuadro__paspartu">
+              <div class="cuadro__visor">
+                <img src="img_borgorosso/referencia-2026-11/terraza-galeria.jpg" alt="Terraza con mesas blancas, helechos y pinturas sobre muros de piedra" loading="lazy" style="object-position:50% 40%">
+                <p class="cuadro__historia"><span>La historia del rincón</span>Entre helechos y muros de piedra, las pinturas también salen a tomar el aire.</p>
+              </div>
+            </div>
+          </div>
+          <figcaption>
+            <h3 class="titulo">La Terraza al Aire Libre</h3>
+            <p>Floral y vintage: helechos, buganvilias y pinturas entre mesas blancas, ideal para familias y amigos.</p>
+          </figcaption>
+        </figure>
+
+        <figure class="cuadro reveal">
+          <p class="cuadro__etiqueta"><b>03</b> / Fuego de leña</p>
+          <div class="cuadro__marco">
+            <div class="cuadro__paspartu">
+              <div class="cuadro__visor">
+                <img src="img_borgorosso/Captura%20de%20pantalla%202026-10-27%20201148.png" alt="Mesa larga servida con velas, copas y mantelería burdeos" loading="lazy" class="recorte-inferior" style="object-position:50% 0%">
+                <p class="cuadro__historia"><span>La historia del rincón</span>Lo que sale del horno de leña se comparte al centro de la mesa larga, como en casa.</p>
+              </div>
+            </div>
+          </div>
+          <figcaption>
+            <h3 class="titulo">El Horno de Leña &amp; Sabor Criollo</h3>
+            <p>Pizzas y pollos a la leña, pastas hechas en casa y la sazón criolla que se comparte en mesa larga.</p>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CAMPAÑA: NAVIDAD ============ -->
+  <section id="evento" class="seccion evento">
+    <div class="contenedor evento__grid">
+      <figure class="evento__flyer reveal">
+        <img src="img_borgorosso/Captura%20de%20pantalla%202026-10-27%20203304.png" alt="Arco de entrada de Borgorosso con guirnalda y lazos rojos de Navidad" loading="lazy">
+      </figure>
+
+      <div class="reveal">
+        <p class="eyebrow">Cartelera · Campaña activa · Diciembre</p>
+        <h2 class="titulo evento__titulo">Navidad en Borgorosso</h2>
+        <ul class="evento__datos">
+          <li><b>Temporada</b> Todo diciembre</li>
+          <li><b>Ambiente</b> Salón y terraza vestidos de Navidad</li>
+          <li><b>Reuniones</b> Banquetes con menú personalizado</li>
+          <li><b>Lugar</b> Casona Borgorosso, Chosica</li>
+        </ul>
+
+        <div class="cuenta" data-countdown aria-label="Cuenta regresiva para Nochebuena">
+          <div class="cuenta__caja"><strong data-u="dias">00</strong><span>Días</span></div>
+          <div class="cuenta__caja"><strong data-u="horas">00</strong><span>Horas</span></div>
+          <div class="cuenta__caja"><strong data-u="minutos">00</strong><span>Min</span></div>
+          <div class="cuenta__caja"><strong data-u="segundos">00</strong><span>Seg</span></div>
+        </div>
+
+        <div class="evento__cta">
+          <button type="button" class="btn-vino" data-reservar="navidad">Reserva tu mesa de Navidad</button>
+          <button type="button" class="btn-fantasma" data-reservar="banquete">Cotizar cena de fin de año</button>
+        </div>
+
+        <div class="evento__redes">
+          <a href="https://www.instagram.com/borgorosso_chosica/?hl=es" target="_blank" rel="noopener">Instagram · novedades</a>
+          <a href="https://www.facebook.com/pizzeriaborgorosso/?locale=es_LA" target="_blank" rel="noopener">Facebook · publicaciones</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PORTAL A LA CARTA VIRTUAL ============ -->
+  <section class="franja-carta" aria-labelledby="franja-carta-titulo">
+    <div class="contenedor franja-carta__interior">
+      <div class="franja-carta__texto reveal">
+        <h2 id="franja-carta-titulo" class="titulo"><span class="solo-casona">Siéntate a la mesa de madera y abre la carta de la casona</span><span class="solo-navidad">La mesa de diciembre está servida: abre la carta de la casona</span></h2>
+        <p>Tres capítulos para empezar: el fuego, la pasta hecha en casa y la sazón criolla.</p>
+      </div>
+
+      <ol class="especialidades">
+        <li class="especialidad reveal">
+          <span class="especialidad__num" aria-hidden="true">I</span>
+          <h3>Pizzas a la leña</h3>
+          <p>Masa hecha al momento y horno de leña: de la Margherita a la Al Prosciutto.</p>
+          <span class="especialidad__desde">desde S/ 29</span>
+        </li>
+        <li class="especialidad reveal">
+          <span class="especialidad__num" aria-hidden="true">II</span>
+          <h3>Pastas artesanales</h3>
+          <p>Lasagne, carbonara y rigatoni a la leña con pasta fresca hecha en casa.</p>
+          <span class="especialidad__desde">desde S/ 29</span>
+        </li>
+        <li class="especialidad reveal">
+          <span class="especialidad__num" aria-hidden="true">III</span>
+          <h3>Carnes &amp; Criollo</h3>
+          <p>Costillar de 8 horas, lomo saltado, panceta y pollo a la leña.</p>
+          <span class="especialidad__desde">desde S/ 26</span>
+        </li>
+      </ol>
+
+      <div class="franja-carta__accion">
+        <a class="btn-magnetico" href="carta.html" data-portal data-magnetico>Cruzar al Salón de la Carta Virtual →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACTO: TARJETA DE CASONA ============ -->
+  <section id="contacto" class="seccion contacto-casona">
+    <div class="contenedor">
+      <svg class="divisor-ornamental" viewBox="0 0 240 20" aria-hidden="true">
+        <g fill="none" stroke="currentColor">
+          <path d="M4 10h86M150 10h86" stroke-width=".9"/>
+          <path d="M96 10c8-8 16-8 24 0-8 8-16 8-24 0zM120 10c8-8 16-8 24 0-8 8-16 8-24 0z" stroke-width="1.1"/>
+          <circle cx="120" cy="10" r="2.4" fill="currentColor" stroke="none"/>
+        </g>
+      </svg>
+      <div class="encabezado-seccion reveal">
+        <h2 class="titulo">Te esperamos en la casona</h2>
+      </div>
+
+      <article class="tarjeta-casona reveal">
+        <div class="tarjeta-casona__info">
+          <div class="dato">
+            <span class="dato__icono"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+            <div>
+              <h3>Horarios</h3>
+              <p>Todos los días de <strong>8:30 AM a 11:00 PM</strong></p>
+              <p>Delivery desde las <strong>12:00 PM</strong></p>
+            </div>
+          </div>
+          <div class="dato">
+            <span class="dato__icono"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="10" r="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span>
+            <div>
+              <h3>Dirección</h3>
+              <p>Jr. Cuzco 166-366, Lurigancho-Chosica 15468</p>
+              <p>Sede única en Chosica, Lima</p>
+            </div>
+          </div>
+          <div class="dato">
+            <span class="dato__icono"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l-.6 5.2A4.4 4.4 0 0 1 12 12a4.4 4.4 0 0 1-4.4-3.8zM12 12v7M8.5 21h7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div>
+              <h3>Reservas y pedidos</h3>
+              <p>WhatsApp <a href="https://wa.me/51973548429?text=%C2%A1Hola%20Borgorosso!%20Quisiera%20informaci%C3%B3n%20sobre%20la%20casona." target="_blank" rel="noopener">+51 973 548 429</a></p>
+            </div>
+          </div>
+          <div class="tarjeta-casona__acciones">
+            <a class="btn-vino" href="https://wa.me/51973548429?text=%C2%A1Hola%20Borgorosso!%20Quisiera%20informaci%C3%B3n%20sobre%20la%20casona." target="_blank" rel="noopener">Escribir por WhatsApp</a>
+            <button type="button" class="btn-oro" data-reservar="regular">Reservar mesa</button>
+            <button type="button" class="btn-oro" data-reservar="banquete">Cotizar banquete</button>
+            <button type="button" class="btn-oro" data-chat-open>Hablar con el asistente</button>
+          </div>
+        </div>
+
+        <div class="tarjeta-casona__mapa">
+          <svg class="mapa-estilizado" viewBox="0 0 400 300" role="img" aria-label="Mapa ilustrado de Chosica con la ubicación de Borgorosso en Jr. Cuzco">
+            <rect width="400" height="300" fill="var(--mapa-fondo)"/>
+            <path d="M0 70 L50 30 L95 62 L150 18 L205 58 L260 22 L318 60 L360 34 L400 56 V0 H0Z" fill="var(--mapa-cerro)"/>
+            <path d="M0 300 L60 262 L120 286 L190 250 L250 282 L320 248 L400 276 V300Z" fill="var(--mapa-cerro)" opacity=".7"/>
+            <path d="M-10 120 C80 140 120 100 200 128 S330 170 410 150" fill="none" stroke="var(--mapa-rio)" stroke-width="14" stroke-linecap="round" opacity=".55"/>
+            <path d="M-10 196 C90 206 150 176 230 196 S350 226 410 214" fill="none" stroke="var(--mapa-via)" stroke-width="7" stroke-linecap="round"/>
+            <g stroke="var(--mapa-calle)" stroke-width="2.4" stroke-linecap="round" fill="none">
+              <path d="M120 88 L140 236"/><path d="M200 82 L206 240"/><path d="M276 92 L262 240"/>
+              <path d="M96 160 L318 168"/><path d="M110 228 L300 236"/>
+            </g>
+            <text x="18" y="114" class="mapa-rotulo">Río Rímac</text>
+            <text x="18" y="224" class="mapa-rotulo">Carretera Central</text>
+            <text x="214" y="104" class="mapa-rotulo mapa-rotulo--calle">Jr. Cuzco</text>
+            <g class="mapa-pin" transform="translate(204 150)">
+              <circle class="mapa-pin__pulso" r="16"/>
+              <path d="M0 6 C-10 -6 -12 -12 -12 -18 a12 12 0 0 1 24 0 c0 6 -2 12 -12 24z" fill="var(--vino)" stroke="var(--crema)" stroke-width="2"/>
+              <circle cy="-18" r="4.5" fill="var(--crema)"/>
+            </g>
+            <g transform="translate(360 262)" class="mapa-brujula">
+              <circle r="16" fill="none" stroke="currentColor" stroke-width="1"/>
+              <path d="M0 -13 L4 0 L0 13 L-4 0Z" fill="currentColor"/>
+              <text y="-19" text-anchor="middle" class="mapa-rotulo">N</text>
+            </g>
+          </svg>
+          <div class="mapa-tarjeta">
+            <p><strong>Borgorosso</strong><span>Jr. Cuzco 166-366 · Chosica</span></p>
+            <div class="mapa-tarjeta__acciones">
+              <a class="btn-vino" href="https://www.google.com/maps/search/?api=1&amp;query=Jr.+Cuzco+166+Chosica+Lima" target="_blank" rel="noopener">Abrir en Google Maps</a>
+              <button type="button" class="btn-oro" data-reservar="regular">Reserva rápida</button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Ornamento dorado para las esquinas del hero -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <g id="adorno-esquina" fill="none" stroke="currentColor">
+        <path d="M2 40V14C2 7 7 2 14 2h26" stroke-width="1.6"/>
+        <path d="M8 34V18c0-6 4-10 10-10h16" stroke-width=".8"/>
+        <circle cx="14" cy="14" r="2.6" fill="currentColor" stroke="none"/>
+        <path d="M14 14c4-7 11-9 16-6-5.5.4-10 2.4-16 6zM14 14c-7 4-9 11-6 16 .4-5.5 2.4-10 6-16z" fill="currentColor" stroke="none" opacity=".8"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="pie">
+    <div class="contenedor pie__grid">
+      <div class="pie__col pie__col--marca">
+        <a class="pie__logo" href="index.html">BORGOROSSO<small>Restaurante Turístico &amp; Galería</small></a>
+        <p>Cocina criolla, pastas artesanales, horno a la leña y arte vivo en una casona única en Chosica.</p>
+        <p class="pie__eslogan">“Donde el fuego de la leña se encuentra con el arte de sentirse en casa.”</p>
+      </div>
+
+      <div class="pie__col">
+        <h3>Horarios &amp; Atención</h3>
+        <ul class="pie__horarios">
+          <li><span>Salón en Chosica</span><strong>Lunes a Domingo · 8:30 AM – 11:00 PM</strong></li>
+          <li><span>Delivery</span><strong>Todos los días desde las 12:00 PM</strong></li>
+          <li><span>Teléfono / WhatsApp</span><a href="tel:+51973548429"><strong>+51 973 548 429</strong></a></li>
+        </ul>
+      </div>
+
+      <div class="pie__col">
+        <h3>Síguenos</h3>
+        <p>Reels, campañas y novedades de la casona.</p>
+        <div class="pie__redes">
+          <a class="pie__red" href="https://www.instagram.com/borgorosso_chosica/?hl=es" target="_blank" rel="noopener" aria-label="Instagram de Borgorosso"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.6" cy="6.4" r="1.25" fill="currentColor"/></svg></a>
+          <a class="pie__red" href="https://www.facebook.com/pizzeriaborgorosso/?locale=es_LA" target="_blank" rel="noopener" aria-label="Facebook de Borgorosso"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg></a>
+          <a class="pie__red" href="https://wa.me/51973548429?text=%C2%A1Hola%20Borgorosso!%20Quisiera%20informaci%C3%B3n%20sobre%20la%20casona." target="_blank" rel="noopener" aria-label="WhatsApp de Borgorosso"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.04 21.5h-.01a9.43 9.43 0 0 1-4.81-1.32l-.35-.21-3.58.94.96-3.49-.22-.36a9.4 9.4 0 0 1-1.44-5.02c0-5.2 4.24-9.44 9.46-9.44 2.52 0 4.89.99 6.68 2.77a9.38 9.38 0 0 1 2.76 6.68c0 5.21-4.24 9.45-9.45 9.45zm8.04-17.49A11.3 11.3 0 0 0 12.04.67C5.77.67.67 5.77.67 12.04c0 2 .52 3.96 1.52 5.68L.57 23.33l5.74-1.5a11.33 11.33 0 0 0 5.73 1.46h.01c6.26 0 11.36-5.1 11.36-11.37 0-3.04-1.18-5.89-3.33-8.04z"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contenedor pie__base">
+      <p>© 2026 Borgorosso Casona Galería · Sede Única en Chosica, Lima, Perú.</p>
+    </div>
+  </footer>
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/pedidos-store.js"></script>
+  <script src="js/pedidos-supabase.js"></script>
+  <script src="js/carta-datos.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

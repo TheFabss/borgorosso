@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pide desde tu mesa · Borgorosso</title>
+  <meta name="theme-color" content="#6E1414">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/operacion.css">
+</head>
+<body class="op op--cliente">
+  <script>try{if(JSON.parse(localStorage.getItem("borgorosso_tema"))==="navidad")document.body.dataset.theme="navidad"}catch(e){}</script>
+  <header class="cli-cabecera">
+    <span class="op-marca">BORGOROSSO</span>
+    <span class="cli-lugar" id="cli-lugar"></span>
+  </header>
+
+  <div id="vista-carta">
+    <nav class="cli-tabs" id="cli-tabs" aria-label="Categorías"></nav>
+    <main class="cli-contenido" id="cli-platos"></main>
+  </div>
+
+  <main class="cli-contenido" id="vista-seguimiento" aria-live="polite" hidden></main>
+
+  <div class="cli-barra">
+    <button type="button" class="cli-ver" id="cli-ver" hidden>
+      <span id="cli-ver-cantidad"></span><span id="cli-ver-total"></span>
+    </button>
+    <nav class="cli-nav" aria-label="Secciones">
+      <button type="button" id="nav-carta" aria-current="page">Carta</button>
+      <button type="button" id="nav-seguimiento">Mi pedido y cuenta</button>
+    </nav>
+  </div>
+
+  <dialog class="cli-hoja" id="hoja-pedido" aria-labelledby="hoja-titulo">
+    <div class="cli-hoja__titulo">
+      <h2 id="hoja-titulo">Tu pedido</h2>
+      <button type="button" class="cli-cerrar" data-cerrar aria-label="Cerrar">✕</button>
+    </div>
+    <div id="hoja-lineas"></div>
+    <form id="form-pedido" novalidate>
+      <div id="bloque-celular" hidden>
+        <label class="cli-campo">¿Dónde lo recibes?
+          <select name="modo">
+            <option value="mesa">Estoy en una mesa</option>
+            <option value="recojo">Para recoger en barra</option>
+          </select>
+        </label>
+        <label class="cli-campo" id="campo-mesa">Número de mesa
+          <input name="mesa" type="text" inputmode="numeric" maxlength="3">
+        </label>
+        <label class="cli-campo" id="campo-nombre" hidden>Tu nombre
+          <input name="cliente" type="text" maxlength="50" autocomplete="name">
+        </label>
+      </div>
+      <label class="cli-campo">Indicaciones para cocina (opcional)
+        <input name="notas" type="text" maxlength="160" placeholder="Alergias, punto de cocción…">
+      </label>
+      <p class="cli-total"><span>Total</span><span id="hoja-total"></span></p>
+      <p class="cli-error" id="pedido-error" role="alert"></p>
+      <button type="submit" class="cli-accion">Enviar a cocina</button>
+    </form>
+  </dialog>
+
+  <dialog class="cli-hoja cli-hoja--centro" id="hoja-pago" aria-labelledby="pago-titulo">
+    <div class="cli-hoja__titulo">
+      <h2 id="pago-titulo">Pagar en línea</h2>
+      <button type="button" class="cli-cerrar" data-cerrar aria-label="Cerrar">✕</button>
+    </div>
+    <p class="cli-demo">Modo demostración: no se realiza ningún cobro. Aquí irá la pasarela de pago (Yape, Plin o tarjeta).</p>
+    <p class="cli-total"><span>A pagar</span><span id="pago-total"></span></p>
+    <button type="button" class="cli-accion" id="pago-confirmar">Simular pago aprobado</button>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/pedidos-store.js"></script>
+  <script src="js/pedidos-supabase.js"></script>
+  <script src="js/carta-datos.js"></script>
+  <script src="js/mesa.js"></script>
+</body>
+</html>

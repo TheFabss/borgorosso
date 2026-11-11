@@ -1,0 +1,927 @@
+/* =========================================================
+   BORGOROSSO · carta.css
+   Escenografía inmersiva: mesa de madera en penumbra,
+   pliego de papel algodón, capítulos y comanda de cuero.
+   ========================================================= */
+
+.pagina-carta {
+  --mesa: #18110E;
+  --papel: #F7F2E7;
+  --tinta-carta: #2B1810;
+  --sepia: #5C4D42;
+  --terciopelo: #5A0E14;
+  --oro-viejo: #A88545;
+  --cuero: #3B2418;
+
+  min-height: 100vh;
+  color: var(--tinta-carta);
+  background-color: var(--mesa);
+  background-image:
+    radial-gradient(ellipse 70% 45% at 50% 12%, rgba(255, 176, 92, .18), transparent 70%),
+    radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, .78) 100%),
+    repeating-linear-gradient(91deg, rgba(255, 255, 255, .018) 0 2px, transparent 2px 9px, rgba(0, 0, 0, .06) 9px 11px, transparent 11px 23px),
+    linear-gradient(180deg, #241913 0%, var(--mesa) 55%, #100a08 100%);
+  background-attachment: fixed;
+}
+
+/* Halo del candelabro que respira sobre la mesa */
+.mesa-luz {
+  position: fixed;
+  top: -22vh;
+  left: 50%;
+  width: min(1100px, 140vw);
+  height: 70vh;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(255, 186, 104, .22), transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+  animation: llama 5s ease-in-out infinite;
+}
+
+/* ---------- HUD flotante ---------- */
+.hud-volver {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  text-decoration: none;
+  color: var(--oro);
+}
+.hud-volver__sello {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  font: 700 1.35rem/1 'Cinzel', serif;
+  color: #4a0b10;
+  background: radial-gradient(circle at 34% 30%, #EAD08F, var(--oro) 45%, #8A6A2F 100%);
+  box-shadow:
+    inset 0 0 0 3px rgba(90, 14, 20, .22),
+    inset 0 0 0 7px rgba(255, 255, 255, .14),
+    inset 0 0 0 8px rgba(90, 14, 20, .25),
+    0 10px 20px -8px rgba(0, 0, 0, .8);
+  transition: transform .5s cubic-bezier(.3, 1.5, .5, 1);
+}
+.hud-volver:hover .hud-volver__sello { transform: rotate(-14deg) scale(1.05); }
+.hud-volver__txt {
+  padding: .45rem .9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(197, 160, 89, .45);
+  background: rgba(24, 17, 14, .72);
+  backdrop-filter: blur(4px);
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.hud-derecha {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.hud-derecha .tema-switch { background: rgba(24, 17, 14, .72); color: var(--oro); }
+
+.hud-comanda {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .6rem .7rem .6rem 1rem;
+  border-radius: 14px 14px 14px 4px;
+  border: 1px solid rgba(197, 160, 89, .55);
+  color: var(--oro);
+  background:
+    var(--ruido),
+    linear-gradient(150deg, #5a3624, var(--cuero) 60%, #24140c);
+  box-shadow: inset 0 0 0 4px rgba(0, 0, 0, .15), 0 14px 28px -12px rgba(0, 0, 0, .85);
+  font: 600 .8rem/1 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .3s ease;
+}
+.hud-comanda:hover { transform: translateY(-2px); }
+.hud-comanda__icono { width: 22px; height: 22px; }
+.hud-comanda__n {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 7px;
+  border-radius: 999px;
+  color: var(--terciopelo);
+  background: radial-gradient(circle at 35% 30%, #EAD08F, var(--oro) 60%, #9C7A3C);
+  font: 800 .85rem/1 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0;
+}
+.hud-comanda.is-rebotando .hud-comanda__n { animation: contador .6s cubic-bezier(.3, 1.6, .5, 1); }
+
+/* ---------- Escena: capítulos + pliego ---------- */
+.escena {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 940px);
+  justify-content: center;
+  padding: 6.5rem 1.5rem 7rem;
+}
+
+/* Marcapáginas de tela burdeos que asoman por detrás del pliego */
+.capitulos {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  margin-top: 9rem;
+  z-index: 1;
+}
+.capitulo {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: .55rem;
+  width: 100%;
+  padding: .8rem 2.6rem .8rem 1rem;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font: 500 1.02rem/1.2 'Playfair Display', serif;
+  color: rgba(247, 242, 231, .7);
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, .12) 0 2px, transparent 2px 5px),
+    linear-gradient(90deg, #3c080c, var(--terciopelo) 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 7% 50%);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .3);
+  transform: translateX(26px);
+  transition: transform .5s cubic-bezier(.2, .8, .2, 1), color .3s ease, background .3s ease;
+}
+.capitulo::after {
+  content: "";
+  position: absolute;
+  left: 1.4rem;
+  right: 3rem;
+  bottom: .45rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--oro), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .5s ease .1s;
+}
+.capitulo:hover { transform: translateX(14px); color: var(--papel); }
+.capitulo.is-active {
+  transform: translateX(0);
+  color: var(--papel);
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, .1) 0 2px, transparent 2px 5px),
+    linear-gradient(90deg, #5a0e14, #8a1c24 75%);
+}
+.capitulo.is-active::after { transform: scaleX(1); }
+.capitulo__num {
+  min-width: 2.3rem;
+  padding-left: .6rem;
+  font: 700 .82rem/1 'Cinzel', serif;
+  color: var(--oro);
+}
+
+/* ---------- Pliego de papel algodón ---------- */
+.pliego {
+  --luz-x: 50%;
+  --luz-y: 20%;
+  position: relative;
+  z-index: 2;
+  padding: clamp(3rem, 6vw, 4.8rem) clamp(1.4rem, 5.5vw, 4.4rem);
+  color: var(--tinta-carta);
+  background-color: var(--papel);
+  background-image:
+    var(--ruido),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, .65), transparent 60%),
+    radial-gradient(ellipse at 0% 100%, rgba(160, 120, 60, .16), transparent 45%),
+    radial-gradient(ellipse at 100% 100%, rgba(160, 120, 60, .14), transparent 45%);
+  border: 1px solid var(--oro);
+  outline: 1px solid rgba(197, 160, 89, .6);
+  outline-offset: -13px;
+  box-shadow:
+    0 2px 0 #e4d9c3,
+    0 4px 0 #d8ccb3,
+    0 45px 90px -25px rgba(0, 0, 0, .9),
+    0 18px 34px -14px rgba(0, 0, 0, .7),
+    inset 0 0 70px rgba(150, 110, 60, .2);
+}
+
+.pliego__halo {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(420px circle at var(--luz-x) var(--luz-y), rgba(255, 196, 110, .7), transparent 62%);
+  mix-blend-mode: soft-light;
+  transition: background-position .2s;
+}
+
+.esquina {
+  position: absolute;
+  z-index: 2;
+  width: clamp(40px, 6vw, 66px);
+  height: clamp(40px, 6vw, 66px);
+  color: var(--oro-viejo);
+  pointer-events: none;
+}
+.esquina--si { top: 4px; left: 4px; }
+.esquina--sd { top: 4px; right: 4px; transform: scaleX(-1); }
+.esquina--ii { bottom: 4px; left: 4px; transform: scaleY(-1); }
+.esquina--id { bottom: 4px; right: 4px; transform: scale(-1, -1); }
+
+.pliego__cabecera,
+.pliego__pie { position: relative; z-index: 2; text-align: center; }
+.pliego__marca {
+  margin: 0;
+  font: 700 clamp(1.7rem, 4.4vw, 2.6rem)/1 'Cinzel', serif;
+  letter-spacing: .32em;
+  padding-left: .32em;
+  color: var(--vino);
+}
+.pliego__sub {
+  margin: .55rem 0 0;
+  font: italic 500 1.05rem 'Playfair Display', serif;
+  color: var(--sepia);
+}
+.filete {
+  display: block;
+  width: min(240px, 70%);
+  height: 20px;
+  margin: 1rem auto;
+  color: var(--oro-viejo);
+}
+.pliego__horario {
+  font-size: .78rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--sepia);
+}
+
+/* ---------- Página (capítulo actual) ---------- */
+.pagina {
+  position: relative;
+  z-index: 2;
+  margin-top: 2.6rem;
+  transform-origin: 50% 0;
+}
+.pagina.is-saliendo { animation: paginaSale .38s ease-in forwards; }
+.pagina.is-entrando { animation: paginaEntra .7s cubic-bezier(.2, .75, .2, 1) both; }
+
+.pagina__titulo {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.4rem;
+}
+.pagina__num {
+  font: 700 clamp(2.4rem, 6vw, 3.6rem)/1 'Cinzel', serif;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--oro-viejo);
+}
+.pagina__titulo h1 {
+  margin: 0;
+  font: italic 600 clamp(2rem, 5vw, 3rem)/1.1 'Playfair Display', serif;
+  color: var(--tinta-carta);
+}
+
+/* ---------- Platos: filas editoriales ---------- */
+.destacados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 2.4rem 2.6rem;
+  margin: 0 0 3rem;
+}
+.destacados:empty { display: none; }
+
+.carta-lista {
+  columns: 2;
+  column-gap: 3.4rem;
+  column-rule: 1px solid rgba(197, 160, 89, .35);
+}
+
+.obra {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1rem;
+  align-items: start;
+  padding: 1.05rem 1.1rem 1.15rem;
+  margin: 0 -1.1rem .5rem;
+  break-inside: avoid;
+  transition: background-color .45s ease;
+}
+/* Marco dorado y trazo botánico que aparecen al pasar */
+.obra::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--oro);
+  opacity: 0;
+  transform: scale(.985);
+  transition: opacity .45s ease, transform .45s ease;
+  pointer-events: none;
+}
+.obra::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -10px;
+  width: 46px;
+  height: 46px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path d='M6 42C14 26 26 14 42 6' fill='none' stroke='%233A5A40' stroke-width='1.3' stroke-linecap='round'/><path d='M14 30c-6-2-9-7-8-12 6 1 10 6 8 12zM22 22c-2-6 0-11 5-14 2 6 0 11-5 14zM30 14c3-5 8-7 13-5-3 5-8 7-13 5z' fill='%233A5A40' opacity='.75'/></svg>") center / contain no-repeat;
+  opacity: 0;
+  transform: rotate(-20deg) scale(.7);
+  transition: opacity .45s ease, transform .5s ease;
+  pointer-events: none;
+}
+.obra:hover,
+.obra:focus-within { background-color: rgba(255, 214, 150, .2); }
+.obra:hover::before,
+.obra:focus-within::before { opacity: .75; transform: none; }
+.obra:hover::after,
+.obra:focus-within::after { opacity: .9; transform: none; }
+
+.obra__linea {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: .55rem;
+}
+.obra__nombre {
+  margin: 0;
+  font: 600 clamp(1.15rem, 2.1vw, 1.42rem)/1.2 'Playfair Display', serif;
+  color: var(--tinta-carta);
+}
+.obra__puntos {
+  flex: 1;
+  min-width: 1.4rem;
+  border-bottom: 1px dotted var(--oro);
+  transform: translateY(-.28em);
+}
+.obra__precio {
+  white-space: nowrap;
+  font: 700 1.05rem/1 'Cinzel', serif;
+  color: var(--vino);
+}
+.obra__desc {
+  grid-column: 1;
+  margin: .35rem 0 0;
+  font: italic 400 .98rem/1.45 'Playfair Display', serif;
+  color: var(--sepia);
+}
+
+/* Selectores de porción como timbres de bronce */
+.timbres {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin-top: .7rem;
+}
+.timbre {
+  padding: .4rem .78rem;
+  border: 1px solid #8A6A2F;
+  border-radius: 4px 4px 11px 11px;
+  background: linear-gradient(180deg, #ECD7A4, var(--oro) 55%, #9C7A3C);
+  color: #3a2410;
+  font: 700 .76rem/1 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: .03em;
+  cursor: pointer;
+  opacity: .55;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), 0 2px 0 #7a5b26;
+  transition: opacity .25s ease, transform .2s ease, box-shadow .2s ease;
+}
+.timbre:hover { opacity: .85; }
+.timbre[aria-pressed="true"] {
+  opacity: 1;
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 1px 0 #7a5b26, 0 0 0 2px rgba(110, 20, 20, .4);
+}
+
+/* Sello de lacre "Sumar a la mesa" */
+.sello {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  width: 64px;
+  height: 64px;
+  padding: 0 .45rem;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--papel);
+  background: radial-gradient(circle at 34% 30%, #a02c33, var(--vino) 55%, #3e080c);
+  box-shadow:
+    inset 0 0 0 3px rgba(197, 160, 89, .7),
+    inset 0 0 0 5px rgba(0, 0, 0, .18),
+    0 8px 16px -6px rgba(43, 24, 16, .65);
+  font: 700 .5rem/1.15 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: 0;
+  transform: scale(.6) rotate(-22deg);
+  transition: opacity .35s ease, transform .5s cubic-bezier(.3, 1.6, .5, 1);
+}
+.sello span {
+  display: block;
+  margin-bottom: .1rem;
+  font: 600 1.25rem/1 'Playfair Display', serif;
+  color: var(--oro);
+}
+.obra:hover .sello,
+.obra:focus-within .sello { opacity: 1; transform: none; }
+.sello.is-sellado { animation: sellar .6s ease; }
+
+/* En pantallas táctiles no hay hover: el sello siempre está visible. */
+@media (hover: none) {
+  .sello { opacity: 1; transform: none; width: 58px; height: 58px; }
+}
+
+/* ---------- "La Obra del Chef": marco de galería ---------- */
+.obra--marco {
+  margin: 14px;
+  padding: 2.1rem 1.6rem 1.6rem;
+  background-color: rgba(255, 252, 244, .7);
+  border: 1px solid var(--oro);
+  box-shadow:
+    0 0 0 6px var(--papel),
+    0 0 0 7px var(--oro-viejo),
+    0 0 0 12px #EBDFC6,
+    0 0 0 13px rgba(197, 160, 89, .7),
+    0 24px 34px -20px rgba(43, 24, 16, .6);
+}
+.obra--marco .obra__nombre { font-size: clamp(1.3rem, 2.4vw, 1.65rem); }
+.obra--marco::before { inset: 6px; }
+.obra__etiqueta {
+  position: absolute;
+  top: -.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: .32rem .95rem;
+  white-space: nowrap;
+  font: 700 .66rem/1 'Cinzel', serif;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #3a2410;
+  background: linear-gradient(180deg, #ECD7A4, var(--oro) 60%, #9C7A3C);
+  border: 1px solid #8A6A2F;
+  box-shadow: 0 4px 10px -4px rgba(43, 24, 16, .6);
+  z-index: 2;
+}
+
+/* ---------- Pie del pliego ---------- */
+.pliego__pie { margin-top: 3rem; }
+.pliego__pie p {
+  font: italic 400 .98rem 'Playfair Display', serif;
+  color: var(--sepia);
+}
+
+/* ---------- Comanda: libreta de cuero y papel ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(10, 6, 4, .62);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+}
+.overlay.is-open { opacity: 1; pointer-events: auto; }
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 70;
+  width: min(470px, 100%);
+  padding: .9rem;
+  display: flex;
+  transform: translateX(105%);
+  transition: transform .5s cubic-bezier(.2, .8, .2, 1);
+  background:
+    var(--ruido),
+    radial-gradient(ellipse at 25% 0%, #6a4129, transparent 60%),
+    linear-gradient(160deg, #4a2c1d, var(--cuero) 55%, #22130b);
+  box-shadow: -24px 0 60px -20px rgba(0, 0, 0, .8);
+}
+.drawer.is-open { transform: translateX(0); }
+
+.comanda__cuero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 2px dashed rgba(197, 160, 89, .45);
+  border-radius: 14px;
+  padding: .8rem;
+}
+.comanda__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: .3rem .4rem 1rem;
+  color: var(--oro);
+}
+.comanda__sub {
+  margin: 0;
+  font-size: .68rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(197, 160, 89, .8);
+}
+.comanda__cabecera h2 {
+  margin: .2rem 0 0;
+  font: italic 600 1.7rem/1.1 'Playfair Display', serif;
+  color: #F2E3BF;
+}
+.comanda__cerrar {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1px solid rgba(197, 160, 89, .5);
+  background: transparent;
+  color: var(--oro);
+  cursor: pointer;
+}
+
+.comanda__hoja {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.2rem 1.1rem 1.4rem 2.6rem;
+  border-radius: 4px;
+  color: var(--tinta-carta);
+  background:
+    linear-gradient(90deg, transparent 1.9rem, rgba(110, 20, 20, .4) 1.9rem, rgba(110, 20, 20, .4) calc(1.9rem + 1px), transparent calc(1.9rem + 1px)),
+    repeating-linear-gradient(180deg, transparent 0 27px, rgba(92, 77, 66, .16) 27px 28px),
+    var(--papel);
+  box-shadow: inset 0 0 30px rgba(150, 110, 60, .25), 0 6px 14px -6px rgba(0, 0, 0, .6);
+}
+
+#drawer-items { list-style: none; margin: 0; padding: 0; }
+.linea-comanda {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: .15rem .7rem;
+  align-items: baseline;
+  padding: .55rem 0;
+  border-bottom: 1px dashed rgba(92, 77, 66, .35);
+}
+.linea-comanda__cant { font: 700 .95rem 'Cinzel', serif; color: var(--vino); }
+.linea-comanda__info strong { font: 600 1.02rem 'Playfair Display', serif; }
+.linea-comanda__info small {
+  display: block;
+  font: italic .85rem 'Playfair Display', serif;
+  color: var(--sepia);
+}
+.linea-comanda__precio { font: 700 .92rem 'Cinzel', serif; color: var(--madera); }
+.linea-comanda .controles { grid-column: 2 / -1; justify-self: end; display: flex; gap: .4rem; }
+.linea-comanda .controles button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(110, 20, 20, .5);
+  background: transparent;
+  color: var(--vino);
+  cursor: pointer;
+}
+.linea-comanda .controles button:hover { background: var(--vino); color: var(--papel); }
+.vacio {
+  padding: 1.6rem 0;
+  text-align: center;
+  font: italic 1rem 'Playfair Display', serif;
+  color: var(--sepia);
+}
+
+.comanda__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 1rem 0 1.3rem;
+  padding-top: .6rem;
+  border-top: 4px double var(--oro);
+  font: italic 500 1.2rem 'Playfair Display', serif;
+  color: var(--vino);
+}
+.comanda__total strong { font: 700 1.45rem 'Cinzel', serif; font-style: normal; }
+
+/* Selector de modalidad: tres "timbres" de la libreta */
+.modos { border: 0; padding: 0; margin: 0 0 1.1rem; display: grid; gap: .5rem; min-width: 0; }
+.modos legend {
+  margin-bottom: .55rem;
+  padding: 0;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--madera);
+}
+.modo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .7rem 2.6rem .7rem .85rem;
+  border: 1px dashed rgba(110, 20, 20, .4);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .45);
+  cursor: pointer;
+  transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.modo input { position: absolute; opacity: 0; pointer-events: none; }
+.modo::after {
+  content: "";
+  position: absolute;
+  right: .9rem;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  border-radius: 50%;
+  border: 1px solid var(--vino);
+  transition: background-color .3s ease, box-shadow .3s ease;
+}
+.modo__icono { font-size: 1.35rem; }
+.modo__txt strong { display: block; font: 600 1rem/1.25 'Playfair Display', serif; color: var(--vino); }
+.modo__txt small { font: italic .82rem 'Playfair Display', serif; color: var(--sepia); }
+.modo:has(input:checked) {
+  border-style: solid;
+  border-color: var(--vino);
+  background: rgba(110, 20, 20, .07);
+  box-shadow: inset 4px 0 0 var(--vino);
+}
+.modo:has(input:checked)::after { background: var(--vino); box-shadow: inset 0 0 0 3px var(--papel); }
+.modo:has(input:focus-visible) { outline: 2px solid var(--oro); outline-offset: 2px; }
+.modo.is-agotado { opacity: .45; cursor: not-allowed; }
+
+.comanda .campo input,
+.comanda .campo select { background: rgba(255, 255, 255, .65); color: var(--tinta-carta); border-color: rgba(74, 53, 37, .3); }
+.comanda .campo > span { color: var(--madera); }
+.comanda .error { color: #A11D1D; }
+.comanda .campo-fijo { font-size: .86rem; }
+
+/* ---------- Pantallas medianas y móviles ---------- */
+@media (max-width: 900px) {
+  .pagina-carta::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 4.7rem;
+    z-index: 40;
+    background: linear-gradient(180deg, var(--mesa) 70%, transparent);
+    pointer-events: none;
+  }
+  .escena {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 4.6rem .7rem 6.5rem;
+  }
+  /* El índice se vuelve una cinta de marcapáginas colgantes */
+  .capitulos {
+    position: sticky;
+    top: 4.2rem;
+    z-index: 35;
+    flex-direction: row;
+    gap: .35rem;
+    margin: 0 -.7rem .9rem;
+    padding: 0 .7rem .3rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: linear-gradient(180deg, var(--mesa) 75%, transparent);
+  }
+  .capitulos::-webkit-scrollbar { display: none; }
+  .capitulo {
+    flex: 0 0 auto;
+    width: auto;
+    padding: .55rem .8rem 1.05rem;
+    font-size: .92rem;
+    clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+    transform: translateY(-4px);
+  }
+  .capitulo:hover { transform: translateY(-2px); }
+  .capitulo.is-active { transform: translateY(0); }
+  .capitulo__num { padding-left: 0; min-width: 0; }
+  .capitulo::after { left: .8rem; right: .8rem; bottom: .7rem; }
+  .carta-lista { columns: 1; }
+  .pliego { outline-offset: -9px; }
+}
+
+@media (max-width: 600px) {
+  .hud-extra { display: none; }
+  .hud-volver__sello { width: 44px; height: 44px; font-size: 1.1rem; }
+  .hud-volver__txt { padding: .4rem .7rem; font-size: .68rem; }
+  .hud-comanda__txt { display: none; }
+  .hud-comanda { padding: .5rem .55rem .5rem .7rem; }
+  .obra--marco { margin: 12px 8px; padding: 2rem 1.1rem 1.3rem; }
+  .pagina__titulo { margin-bottom: 1.8rem; }
+  .comanda__hoja { padding-left: 2.3rem; }
+}
+
+
+/* ---------- Tema Navidad sobre la mesa ---------- */
+.pagina-carta[data-theme="navidad"] {
+  --terciopelo: #0F3D2A;
+  background-color: #0A1510;
+  background-image:
+    radial-gradient(ellipse 70% 45% at 50% 12%, rgba(198, 40, 40, .22), transparent 70%),
+    radial-gradient(ellipse at center, transparent 38%, rgba(0, 0, 0, .85) 100%),
+    repeating-linear-gradient(91deg, rgba(255, 255, 255, .015) 0 2px, transparent 2px 9px, rgba(0, 0, 0, .07) 9px 11px, transparent 11px 23px),
+    linear-gradient(180deg, #13261D 0%, #0C1A14 55%, #07100C 100%);
+}
+.pagina-carta[data-theme="navidad"] .mesa-luz { background: radial-gradient(ellipse at center, rgba(198, 40, 40, .26), transparent 65%); }
+.pagina-carta[data-theme="navidad"] .pliego {
+  box-shadow:
+    0 2px 0 #e4d9c3,
+    0 4px 0 #d8ccb3,
+    0 0 70px -10px rgba(198, 40, 40, .55),
+    0 45px 90px -25px rgba(0, 0, 0, .95),
+    inset 0 0 70px rgba(150, 110, 60, .22);
+}
+.pagina-carta[data-theme="navidad"] .pliego .btn-oro { color: #8A5A00; border-color: #C98A00; }
+.pagina-carta[data-theme="navidad"] .capitulo.is-active { background: linear-gradient(90deg, #8E1B1B, #C62828 80%); }
+.pagina-carta[data-theme="navidad"] .hud-comanda,
+.pagina-carta[data-theme="navidad"] .hud-volver__txt { border-color: rgba(255, 209, 102, .6); box-shadow: 0 0 20px -6px rgba(255, 209, 102, .6); }
+
+/* ---------- Animaciones propias de la carta ---------- */
+@keyframes paginaSale {
+  to { opacity: 0; transform: perspective(1200px) rotateX(9deg) translateY(-18px); filter: blur(1px); }
+}
+@keyframes paginaEntra {
+  from { opacity: 0; transform: perspective(1200px) rotateX(-7deg) translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes sellar {
+  0% { transform: scale(1); }
+  35% { transform: scale(.8) rotate(10deg); }
+  100% { transform: scale(1); }
+}
+@keyframes contador {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+}
+
+/* ---------- Pulido de interfaz ---------- */
+.obra__precio, .hud-comanda__n, .comanda__total strong, .linea-comanda__precio { font-variant-numeric: tabular-nums; }
+.sello:active, .timbre:active, .capitulo:active, .hud-comanda:active { scale: .96; }
+.timbre { min-height: 40px; }
+.comanda__cerrar { width: 44px; height: 44px; }
+.linea-comanda .controles button { width: 40px; height: 40px; }
+
+/* ---------- Revisión de diseño ---------- */
+.pagina-carta[data-theme="navidad"] :is(.pliego, .comanda) { --vino: #B3261E; }
+.pliego .btn-oro { color: #7A5A1E; }
+.hud-comanda__n { color: #3a0a0e; }
+.pagina.is-saliendo { animation-timing-function: cubic-bezier(.23, 1, .32, 1); }
+.pagina-carta[data-theme="navidad"] .hud-comanda,
+.pagina-carta[data-theme="navidad"] .hud-volver__txt { box-shadow: 0 8px 20px -8px rgba(255, 209, 102, .5); }
+/* El sello se intensifica al pasar, pero siempre se ve: es la acción principal. */
+.sello {
+  width: 72px;
+  height: 72px;
+  padding: 0 .3rem;
+  font: 700 .6875rem/1.05 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: .78;
+  transform: none;
+  transition: opacity 160ms ease, transform 200ms cubic-bezier(.23, 1, .32, 1);
+}
+.obra:hover .sello, .obra:focus-within .sello { opacity: 1; transform: scale(1.04); }
+@media (hover: none) { .sello { opacity: 1; } }
+/* Cerrada, la comanda sale también del orden de tabulación. */
+.drawer { visibility: hidden; transition: transform .45s cubic-bezier(.32, .72, 0, 1), visibility 0s linear .45s; }
+.drawer.is-open { visibility: visible; transition: transform .45s cubic-bezier(.32, .72, 0, 1), visibility 0s; }
+@media (max-width: 720px) { .hud-extra { display: none; } }
+
+/* ---------- Navidad en la carta: guirnalda sobre el pliego y acebo en las esquinas ---------- */
+.pagina-carta[data-theme="navidad"] .pliego::before {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  left: -14px;
+  right: -14px;
+  top: -20px;
+  height: 46px;
+  background: url("../img_borgorosso/navidad/guirnalda.svg") repeat-x center top / 582px 46px;
+  filter: drop-shadow(0 6px 5px rgba(0, 0, 0, .5));
+  pointer-events: none;
+}
+.pagina-carta[data-theme="navidad"] .esquina {
+  width: clamp(48px, 7vw, 76px);
+  height: clamp(48px, 7vw, 76px);
+  color: transparent;
+  background: url("../img_borgorosso/navidad/acebo.svg") left top / contain no-repeat;
+}
+.pagina-carta[data-theme="navidad"] .esquina--si,
+.pagina-carta[data-theme="navidad"] .esquina--sd { top: 26px; }
+/* Luz de vela ámbar sobre la mesa, sin halo rojo alrededor del papel */
+.pagina-carta[data-theme="navidad"] {
+  background-image:
+    radial-gradient(ellipse 70% 45% at 50% 12%, rgba(255, 160, 70, .18), transparent 70%),
+    radial-gradient(ellipse at center, transparent 38%, rgba(0, 0, 0, .85) 100%),
+    repeating-linear-gradient(91deg, rgba(255, 255, 255, .015) 0 2px, transparent 2px 9px, rgba(0, 0, 0, .07) 9px 11px, transparent 11px 23px),
+    linear-gradient(180deg, #13261D 0%, #0C1A14 55%, #07100C 100%);
+}
+.pagina-carta[data-theme="navidad"] .mesa-luz { background: radial-gradient(ellipse at center, rgba(255, 170, 80, .22), transparent 65%); }
+.pagina-carta[data-theme="navidad"] .pliego {
+  box-shadow:
+    0 2px 0 #e4d9c3,
+    0 4px 0 #d8ccb3,
+    0 45px 90px -25px rgba(0, 0, 0, .95),
+    0 18px 34px -14px rgba(0, 0, 0, .7),
+    inset 0 0 70px rgba(150, 110, 60, .22);
+}
+.pagina-carta[data-theme="navidad"] .hud-comanda,
+.pagina-carta[data-theme="navidad"] .hud-volver__txt { box-shadow: 0 10px 22px -10px rgba(0, 0, 0, .75); }
+@media (max-width: 720px) {
+  /* En celular el título ocupa todo el ancho: el acebo se achica y sube al borde */
+  .pagina-carta[data-theme="navidad"] .esquina { width: 38px; height: 38px; }
+  .pagina-carta[data-theme="navidad"] .esquina--si,
+  .pagina-carta[data-theme="navidad"] .esquina--sd { top: 14px; }
+}
+
+/* ---------- Navidad: foco visible sobre el papel claro (12:1) ---------- */
+.pagina-carta[data-theme="navidad"] .pliego :focus-visible,
+.pagina-carta[data-theme="navidad"] .comanda :focus-visible { outline: 3px solid #0F3D2A; outline-offset: 3px; }
+.pagina-carta[data-theme="navidad"] .modo:has(input:focus-visible) { outline: 3px solid #0F3D2A; }
+.modo__icono .tema-icono { width: 26px; height: 26px; }
+
+/* ---------- Botón Reservar junto a Mi pedido ---------- */
+.hud-reservar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 44px;
+  padding: .6rem 1rem;
+  border-radius: 14px 14px 4px 14px;
+  border: 1px solid rgba(197, 160, 89, .55);
+  color: var(--oro);
+  background: rgba(24, 17, 14, .72);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 14px 28px -12px rgba(0, 0, 0, .85);
+  font: 600 .8rem/1 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .3s ease, background-color .2s ease;
+}
+.hud-reservar:hover { transform: translateY(-2px); background: rgba(24, 17, 14, .9); }
+.hud-reservar:active { scale: .96; }
+.hud-reservar__icono { width: 20px; height: 20px; flex: none; }
+.hud-comanda { min-height: 44px; }
+@media (max-width: 600px) {
+  /* En celular: el sello B vuelve a la casona y los botones caben en una fila */
+  .hud-volver__txt { display: none; }
+  .hud-derecha { gap: .4rem; right: .75rem; }
+  .hud-volver { left: .75rem; }
+  .hud-reservar { padding: .5rem .7rem; letter-spacing: .06em; font-size: .72rem; }
+}
+@media (max-width: 380px) {
+  .hud-reservar__txt { display: none; }
+  .hud-reservar { padding: .5rem .6rem; }
+}
+.hud-reservar { min-width: 44px; justify-content: center; }
+
+/* ---------- Revisión visual en todos los tamaños ---------- */
+/* Nada puede ensanchar la página: la guirnalda del pliego no sale de la pantalla */
+html:has(.pagina-carta), .pagina-carta { overflow-x: clip; }
+@media (max-width: 720px) {
+  .pagina-carta[data-theme="navidad"] .pliego::before { left: -4px; right: -4px; }
+}
+/* Tablet: la barra superior se compacta para que Volver y los botones no choquen */
+@media (max-width: 900px) {
+  .hud-volver__txt,
+  .hud-derecha .tema-switch__txt,
+  .hud-comanda__txt { display: none; }
+}
+
+/* ---------- Mesa detectada por el QR ---------- */
+.pliego__mesa {
+  display: inline-block;
+  margin: 1rem auto 0;
+  padding: .5rem 1.1rem;
+  border: 1px solid rgba(197, 160, 89, .7);
+  border-radius: 999px;
+  background: rgba(197, 160, 89, .12);
+  color: var(--tinta-carta);
+  font-size: .88rem;
+}
+.pliego__mesa strong { color: #8E1B1B; }

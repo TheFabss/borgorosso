@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR por mesa · Borgorosso</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/operacion.css">
+</head>
+<body class="op op--qr">
+  <h1 class="qr-intro">Códigos QR por mesa</h1>
+  <div class="qr-controles">
+    <label class="qr-base">Dirección pública de la web
+      <input id="qr-base" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://xxxx-5500.brs.devtunnels.ms">
+    </label>
+    <label>Cantidad de mesas <input id="qr-cantidad" type="number" min="1" max="99" value="5"></label>
+    <button type="button" class="per-boton" id="qr-imprimir">Imprimir</button>
+  </div>
+  <p class="qr-aviso" id="qr-aviso" role="alert" hidden></p>
+  <div class="qr-grid" id="qr-grid"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const CLAVE = 'borgorosso_qr_base';
+      const $ = (id) => document.getElementById(id);
+      const grid = $('qr-grid');
+      const aviso = $('qr-aviso');
+      const campo = $('qr-base');
+      const cantidad = $('qr-cantidad');
+      const imprimir = $('qr-imprimir');
+
+      /* Direcciones que solo existen en la laptop o en la red local: un celular no las abre. */
+      function esLocal(url) {
+        if (url.protocol === 'file:') return true;
+        const h = url.hostname;
+        return h === 'localhost' || h === '0.0.0.0' || h === '[::1]' || h.endsWith('.local')
+          || /^127\./.test(h) || /^10\./.test(h) || /^192\.168\./.test(h) || /^172\.(1[6-9]|2\d|3[01])\./.test(h);
+      }
+
+      function leerGuardada() {
+        try { return localStorage.getItem(CLAVE) || ''; } catch { return ''; }
+      }
+
+      /* Orden: ?base= en el enlace, la última guardada, o esta misma página si ya es pública. */
+      const desdeEnlace = new URLSearchParams(location.search).get('base') || '';
+      const actual = new URL('./', location.href);
+      campo.value = desdeEnlace || leerGuardada() || (esLocal(actual) ? '' : actual.href);
+
+      function baseValida() {
+        let texto = campo.value.trim();
+        if (!texto) return { error: 'Pega la dirección pública de la web (la del túnel de VS Code o la web publicada) para generar los QR.' };
+        if (!/^https?:\/\//i.test(texto)) texto = `https://${texto}`;
+        let url;
+        try { url = new URL(texto); } catch { return { error: 'Esa dirección no es válida. Cópiala completa, por ejemplo https://xxxx-5500.brs.devtunnels.ms' }; }
+        if (esLocal(url)) {
+          return { error: `“${url.host}” es una dirección de tu laptop: un celular no puede abrirla. Usa la dirección del túnel (pestaña Ports de VS Code, visibilidad Public) o la web publicada.` };
+        }
+        if (url.protocol !== 'https:') return { error: 'Usa una dirección https: así el celular la abre sin avisos y funciona el GPS del delivery.' };
+        if (!url.pathname.endsWith('/')) url.pathname = url.pathname.replace(/[^/]*$/, '');
+        url.search = '';
+        url.hash = '';
+        return { url };
+      }
+
+      function pintar() {
+        const { url, error } = baseValida();
+        aviso.hidden = !error;
+        aviso.textContent = error || '';
+        imprimir.disabled = Boolean(error);
+        if (error) {
+          grid.innerHTML = '';
+          return;
+        }
+        try { localStorage.setItem(CLAVE, url.href); } catch { /* sin almacenamiento */ }
+        const total = Math.min(99, Math.max(1, Number(cantidad.value) || 1));
+        grid.innerHTML = Array.from({ length: total }, (_, i) => {
+          const mesa = i + 1;
+          const destino = new URL(`carta.html?mesa=${mesa}`, url).href;
+          const qr = window.qrcode(0, 'M');
+          qr.addData(destino);
+          qr.make();
+          const visible = destino.replace(/^https:\/\//, '');
+          return `<article class="qr-tarjeta">
+            <span class="op-marca">BORGOROSSO</span>
+            <h2>Mesa ${mesa}</h2>
+            ${qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true })}
+            <p>Escanea, pide y paga desde tu celular</p>
+            <a class="qr-destino" href="${destino}" target="_blank" rel="noopener">${visible.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</a>
+          </article>`;
+        }).join('');
+      }
+
+      campo.addEventListener('input', pintar);
+      cantidad.addEventListener('input', pintar);
+      imprimir.addEventListener('click', () => window.print());
+      pintar();
+    })();
+  </script>
+</body>
+</html>
