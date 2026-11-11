@@ -1,5 +1,7 @@
 # Beta Borgorosso: pruebas antes de presentar
 
+Web publicada: **https://thefabss.github.io/borgorosso/** (dirección fija, no depende de la laptop).
+
 Número de WhatsApp de la web: **+51 973 548 429** (celular de empresa).
 
 ## Cómo funciona WhatsApp en esta beta
@@ -11,9 +13,9 @@ Los pedidos **en mesa** no pasan por WhatsApp: van directo a la pantalla de coci
 ## Antes de la presentación
 
 - [ ] El celular +51 973 548 429 tiene WhatsApp o WhatsApp Business activo y con internet.
-- [ ] La web está abierta desde una dirección accesible para el celular (túnel de VS Code o web publicada). Abierta como archivo (`C:/...`) no sirve en el teléfono.
+- [ ] Probar siempre desde la web publicada, no desde Live Server ni abriendo el archivo.
 - [ ] Cocina abierta en una laptop o tablet, con sesión iniciada.
-- [ ] Los 5 QR generados desde `mesas-qr.html` con la misma dirección.
+- [ ] Los 5 QR impresos desde https://thefabss.github.io/borgorosso/mesas-qr.html
 
 ## Pruebas desde otro celular (el del cliente)
 
