@@ -35,7 +35,9 @@
       <div class="coc-tarjeta__cabeza"><span class="coc-lugar">${esc(p.lugar)}</span><span class="coc-tiempo">${minutos} min</span></div>
       <ul>${p.items.map((i) => `<li><strong>${i.cantidad} ×</strong> ${esc(i.nombre)}${i.variante ? ` (${esc(i.variante)})` : ''}</li>`).join('')}</ul>
       ${p.notas ? `<p class="coc-notas">${esc(p.notas)}</p>` : ''}
-      ${p.estado === 'por_confirmar' ? '<p class="coc-verificar">Antes de aceptar, un mozo confirma que hay personas en la mesa.</p>' : ''}
+      ${p.estado === 'por_confirmar' ? (p.origen === 'whatsapp'
+        ? '<p class="coc-verificar">Pedido por WhatsApp: revisa la dirección y el pago antes de aceptar.</p>'
+        : '<p class="coc-verificar">Antes de aceptar, un mozo confirma que hay personas en la mesa.</p>') : ''}
       <div class="coc-pie">
         <span class="coc-sello${pagado ? ' is-pagado' : ''}">#${p.numero} · ${pagado ? 'Pagado' : 'Por cobrar'}</span>
         <span class="coc-acciones">${p.estado === 'por_confirmar'
