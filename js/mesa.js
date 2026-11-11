@@ -102,7 +102,10 @@
   function misPedidos() {
     const limite = Date.now() - HORAS_CUENTA * 3600000;
     const ids = leerMios();
-    return pedidos.filter((p) => ids.includes(p.token || p.id) && new Date(p.creado).getTime() > limite);
+    /* Solo los pedidos de esta mesa: un mismo teléfono pudo pedir antes en otra. */
+    return pedidos.filter((p) => ids.includes(p.token || p.id)
+      && new Date(p.creado).getTime() > limite
+      && (!mesa || p.lugar === `Mesa ${mesa}`));
   }
 
   function pintarSeguimiento() {

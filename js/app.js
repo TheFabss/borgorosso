@@ -1003,8 +1003,20 @@
       form.elements.mesa.value = mesaQR;
       form.elements.mesa.readOnly = true;
       form.querySelector('#bloque-insitu .campo > span').textContent = `Mesa Nº ${mesaQR} · detectada por el QR`;
+      const miCuenta = `mesa.html?mesa=${mesaQR}&ver=pedido`;
       document.querySelector('.pliego__cabecera')?.insertAdjacentHTML('beforeend',
-        `<p class="pliego__mesa">Estás en la <strong>Mesa ${mesaQR}</strong>. Tu pedido llega directo a cocina.</p>`);
+        `<p class="pliego__mesa">Estás en la <strong>Mesa ${mesaQR}</strong>. Tu pedido llega directo a cocina.
+          <a class="pliego__mesa-enlace" href="${miCuenta}">Ver mi pedido y cuenta</a></p>`);
+      /* Sentado en la mesa no hace falta reservar: ese botón lleva a su pedido y cuenta. */
+      const reservar = document.querySelector('.hud-reservar');
+      if (reservar) {
+        const cuenta = document.createElement('a');
+        cuenta.className = 'hud-reservar';
+        cuenta.href = miCuenta;
+        cuenta.setAttribute('aria-label', 'Ver mi pedido y cuenta');
+        cuenta.innerHTML = '<svg class="hud-reservar__icono" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 8h6M9 12h6M9 16h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="hud-reservar__txt">Mi cuenta</span>';
+        reservar.replaceWith(cuenta);
+      }
     }
 
     /* Regla: con QR se pide a esa mesa; desde la web (sin QR) solo delivery. */

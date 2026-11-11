@@ -1038,3 +1038,15 @@ html:has(.pagina-carta), .pagina-carta { overflow-x: clip; }
   cursor: pointer;
 }
 .modo-nota { margin: 0 0 .5rem; font-size: .85rem; color: #6b5233; }
+
+/* ---------- Modo QR: acceso a "Mi pedido y cuenta" ---------- */
+a.hud-reservar { text-decoration: none; }
+.pliego__mesa-enlace {
+  display: block;
+  margin-top: .35rem;
+  padding: .3rem 0;
+  color: #8E1B1B;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
