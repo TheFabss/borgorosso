@@ -54,3 +54,14 @@ Configúralos en WhatsApp Business, Herramientas para la empresa.
 
 - Borrar los pedidos de prueba en Supabase (SQL Editor): `delete from public.pedidos where creado > now() - interval '1 day';` (revisa antes que no haya pedidos reales).
 - Antes de abrir al público: eliminar el pago simulado con `drop function public.pagar_en_linea_demo(uuid[]);`.
+
+## Bot de WhatsApp (respuestas automáticas)
+
+El bot vive en `C:\proyectos\borgorosso-bot`, fuera de este repositorio. Para que conteste solo:
+
+1. En la laptop: `cd C:\proyectos\borgorosso-bot` y `npm start`.
+2. La primera vez, escanea el QR con el celular de pruebas (WhatsApp > Dispositivos vinculados).
+3. Espera **Bot de Borgorosso listo** y deja la laptop encendida con internet durante la demo.
+
+Responde a pedidos, reservas y cotizaciones que envía la web, y manda las comandas a "Mensaje a ti mismo"
+del celular de pruebas. Los detalles están en el `LEEME.md` del bot.
