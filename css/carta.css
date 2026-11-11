@@ -925,3 +925,100 @@ html:has(.pagina-carta), .pagina-carta { overflow-x: clip; }
   font-size: .88rem;
 }
 .pliego__mesa strong { color: #8E1B1B; }
+
+/* ---------- Comanda: altura real de la pantalla y scroll solo dentro ---------- */
+.drawer { height: 100dvh; bottom: auto; }
+.comanda__hoja { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+
+/* ---------- Secciones en el celular: barra con la sección actual y hoja con las 7 ---------- */
+.capitulo-movil { display: none; }
+@media (max-width: 720px) {
+  .capitulos { display: none; }
+  .capitulo-movil {
+    position: sticky;
+    top: 4.2rem;
+    z-index: 35;
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    align-items: center;
+    gap: .4rem;
+    margin: 0 -.7rem .9rem;
+    padding: .35rem .7rem .55rem;
+    background: linear-gradient(180deg, var(--mesa) 78%, transparent);
+  }
+  .capitulo-movil__flecha {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(197, 160, 89, .5);
+    border-radius: 50%;
+    background: rgba(24, 17, 14, .7);
+    color: var(--oro);
+    cursor: pointer;
+    transition: transform 160ms var(--ease-salida, ease-out), opacity 160ms ease;
+  }
+  .capitulo-movil__flecha svg { width: 20px; height: 20px; }
+  .capitulo-movil__flecha:active { transform: scale(.94); }
+  .capitulo-movil__flecha:disabled { opacity: .3; cursor: default; }
+  .capitulo-movil__actual {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    min-height: 52px;
+    min-width: 0;
+    padding: .4rem .9rem;
+    border: 1px solid rgba(197, 160, 89, .55);
+    border-radius: 12px;
+    background:
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, .1) 0 2px, transparent 2px 5px),
+      linear-gradient(90deg, #5a0e14, #8a1c24 80%);
+    color: var(--papel);
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 10px 20px -12px rgba(0, 0, 0, .8);
+  }
+  .capitulo-movil__actual:active { transform: scale(.98); }
+  .capitulo-movil__num { font: 700 .95rem/1 'Cinzel', serif; color: var(--oro); }
+  .capitulo-movil__texto { display: grid; flex: 1; min-width: 0; }
+  .capitulo-movil__nombre { font: 600 1.08rem/1.15 'Playfair Display', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .capitulo-movil__pos { font: 600 .72rem/1.3 'Plus Jakarta Sans', sans-serif; letter-spacing: .06em; color: rgba(247, 242, 231, .75); }
+  .capitulo-movil__abrir svg { display: block; width: 20px; height: 20px; color: var(--oro); }
+  .pagina-carta[data-theme="navidad"] .capitulo-movil__actual { background: linear-gradient(90deg, #8E1B1B, #C62828 80%); }
+}
+
+/* Hoja inferior con las secciones */
+.capitulo-hoja {
+  width: min(520px, 100%);
+  max-height: 80dvh;
+  margin: auto auto 0;
+  padding: 1rem 1rem max(1rem, env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: 18px 18px 0 0;
+  background: var(--papel);
+  color: var(--tinta-carta);
+}
+.capitulo-hoja::backdrop { background: rgba(10, 6, 4, .62); }
+.capitulo-hoja[open] { animation: hojaCarta 240ms cubic-bezier(.23, 1, .32, 1) both; }
+@keyframes hojaCarta { from { transform: translateY(32px); opacity: 0; } to { transform: none; opacity: 1; } }
+.capitulo-hoja__titulo { margin: .2rem 0 .8rem; text-align: center; font: 700 .78rem/1 'Plus Jakarta Sans', sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #6b5233; }
+.capitulo-hoja ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .35rem; }
+.capitulo-hoja button {
+  display: grid;
+  grid-template-columns: 2.6rem 1fr auto;
+  align-items: center;
+  width: 100%;
+  min-height: 52px;
+  padding: .4rem .9rem;
+  border: 1px solid rgba(197, 160, 89, .45);
+  border-radius: 12px;
+  background: #fff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.capitulo-hoja button[aria-current="true"] { border-color: #8E1B1B; background: rgba(142, 27, 27, .08); box-shadow: inset 0 0 0 1px #8E1B1B; }
+.capitulo-hoja__num { font: 700 .9rem/1 'Cinzel', serif; color: #8A6A2F; }
+.capitulo-hoja__nombre { font: 600 1.05rem/1.2 'Playfair Display', serif; }
+.capitulo-hoja__cuenta { font-size: .8rem; color: #6b5233; }
+@media (prefers-reduced-motion: reduce) { .capitulo-hoja[open] { animation: none; } }

@@ -318,9 +318,20 @@
     setTimeout(() => el.remove(), 2600);
   }
 
+  /* Safari en iPhone ignora overflow:hidden: se fija la página en su sitio y se devuelve al cerrar. */
+  let scrollGuardado = 0;
   function bloquearScroll() {
-    const hayAbiertos = document.querySelector('.modal.is-open, .drawer.is-open');
-    document.body.classList.toggle('bloqueado', Boolean(hayAbiertos));
+    const hayAbiertos = Boolean(document.querySelector('.modal.is-open, .drawer.is-open'));
+    const estabaBloqueado = document.body.classList.contains('bloqueado');
+    if (hayAbiertos && !estabaBloqueado) {
+      scrollGuardado = window.scrollY;
+      document.body.style.top = `-${scrollGuardado}px`;
+    }
+    document.body.classList.toggle('bloqueado', hayAbiertos);
+    if (!hayAbiertos && estabaBloqueado) {
+      document.body.style.top = '';
+      window.scrollTo({ top: scrollGuardado, behavior: 'instant' });
+    }
   }
 
   function abrirModal(el) {
@@ -763,6 +774,7 @@
         if (activo) c.setAttribute('aria-current', 'true');
         else c.removeAttribute('aria-current');
       });
+      actualizarMovil(cat);
 
       if (esPrimera || movimientoReducido()) {
         pintar(cat);
@@ -782,6 +794,68 @@
     };
 
     capitulos.forEach((c) => c.addEventListener('click', () => cambiar(c.dataset.cat)));
+
+    /* Celular: una barra dice en qué sección estás, flechas para avanzar y una hoja con las 7. */
+    const flecha = (d) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    const barra = document.createElement('div');
+    barra.className = 'capitulo-movil';
+    barra.innerHTML = `
+      <button type="button" class="capitulo-movil__flecha" data-paso="-1" aria-label="Sección anterior">${flecha('M15 5l-7 7 7 7')}</button>
+      <button type="button" class="capitulo-movil__actual" aria-haspopup="dialog" aria-controls="capitulo-hoja">
+        <span class="capitulo-movil__num"></span>
+        <span class="capitulo-movil__texto"><span class="capitulo-movil__nombre"></span><span class="capitulo-movil__pos"></span></span>
+        <span class="capitulo-movil__abrir">${flecha('M6 9l6 6 6-6')}</span>
+      </button>
+      <button type="button" class="capitulo-movil__flecha" data-paso="1" aria-label="Sección siguiente">${flecha('M9 5l7 7-7 7')}</button>`;
+    document.querySelector('.capitulos')?.after(barra);
+
+    const hoja = document.createElement('dialog');
+    hoja.className = 'capitulo-hoja';
+    hoja.id = 'capitulo-hoja';
+    hoja.setAttribute('aria-label', 'Secciones de la carta');
+    hoja.innerHTML = `
+      <p class="capitulo-hoja__titulo">Secciones de la carta</p>
+      <ul>${CATEGORIAS.map((c, i) => `
+        <li><button type="button" data-cat="${c.id}">
+          <span class="capitulo-hoja__num">${NUMERALES[i]}</span>
+          <span class="capitulo-hoja__nombre">${escapar(c.nombre)}</span>
+          <span class="capitulo-hoja__cuenta">${CARTA.filter((p) => p.cat === c.id).length} platos</span>
+        </button></li>`).join('')}
+      </ul>`;
+    document.body.appendChild(hoja);
+
+    function actualizarMovil(cat) {
+      const i = CATEGORIAS.findIndex((c) => c.id === cat);
+      barra.querySelector('.capitulo-movil__num').textContent = NUMERALES[i];
+      barra.querySelector('.capitulo-movil__nombre').textContent = CATEGORIAS[i].nombre;
+      barra.querySelector('.capitulo-movil__pos').textContent = `${i + 1} de ${CATEGORIAS.length}`;
+      barra.querySelector('.capitulo-movil__actual').setAttribute('aria-label', `Sección ${i + 1} de ${CATEGORIAS.length}: ${CATEGORIAS[i].nombre}. Ver todas las secciones`);
+      barra.querySelector('[data-paso="-1"]').disabled = i === 0;
+      barra.querySelector('[data-paso="1"]').disabled = i === CATEGORIAS.length - 1;
+      hoja.querySelectorAll('[data-cat]').forEach((b) => {
+        if (b.dataset.cat === cat) b.setAttribute('aria-current', 'true');
+        else b.removeAttribute('aria-current');
+      });
+    }
+
+    barra.addEventListener('click', (e) => {
+      const paso = e.target.closest('[data-paso]');
+      if (paso) {
+        const siguiente = CATEGORIAS[CATEGORIAS.findIndex((c) => c.id === actual) + Number(paso.dataset.paso)];
+        if (siguiente) cambiar(siguiente.id);
+        return;
+      }
+      if (e.target.closest('.capitulo-movil__actual')) hoja.showModal();
+    });
+    hoja.addEventListener('click', (e) => {
+      const opcion = e.target.closest('[data-cat]');
+      if (opcion) {
+        hoja.close();
+        cambiar(opcion.dataset.cat);
+      } else if (e.target === hoja) {
+        hoja.close(); // tocar fuera de la hoja la cierra
+      }
+    });
 
     pagina.addEventListener('click', (e) => {
       const timbre = e.target.closest('.timbre');

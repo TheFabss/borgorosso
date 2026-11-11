@@ -1983,3 +1983,6 @@ body:not([data-theme="navidad"]) .solo-navidad { display: none; }
 }
 @keyframes hojaSube { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .bg-chat-panel.is-open { animation: none; } }
+
+/* ---------- Ventanas abiertas: el fondo no se mueve (también en iPhone) ---------- */
+body.bloqueado { position: fixed; left: 0; right: 0; width: 100%; }
