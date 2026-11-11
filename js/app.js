@@ -732,8 +732,8 @@
         </div>
         <p class="obra__desc">${escapar(p.desc)}</p>
         ${timbres}
-        <button type="button" class="sello" data-add="${p.id}" aria-label="Sumar ${escapar(p.nombre)} a la mesa">
-          <span aria-hidden="true">+</span>Sumar a la mesa
+        <button type="button" class="sello" data-add="${p.id}" aria-label="${mesaActual() ? 'Sumar' : 'Agregar'} ${escapar(p.nombre)} ${mesaActual() ? 'a la mesa' : 'a tu pedido'}">
+          <span aria-hidden="true">+</span>${mesaActual() ? 'Sumar a la mesa' : 'Agregar al pedido'}
         </button>
       </article>`;
   }
@@ -867,7 +867,7 @@
       const variante = elegido ? elegido.dataset.variante : '';
       if (!agregarAlCarrito(sello.dataset.add, variante)) return;
 
-      toast(`Sumado a la mesa: ${CATALOGO.get(sello.dataset.add).nombre}${variante ? ` (${variante})` : ''}`);
+      toast(`${mesaActual() ? 'Sumado a la mesa' : 'Agregado a tu pedido'}: ${CATALOGO.get(sello.dataset.add).nombre}${variante ? ` (${variante})` : ''}`);
       sello.classList.add('is-sellado');
       setTimeout(() => sello.classList.remove('is-sellado'), 600);
       const hud = document.getElementById('carrito-fab');
@@ -927,7 +927,7 @@
             <button type="button" data-cambiar="${escapar(i.key)}" data-delta="1" aria-label="Añadir uno de ${escapar(i.nombre)}">+</button>
           </div>
         </li>`).join('')
-      : '<li class="vacio">La comanda está en blanco. Elige tus platos y súmalos a la mesa.</li>';
+      : '<li class="vacio">Aún no hay platos. Elige los que quieras y agrégalos.</li>';
 
     const subtotal = document.getElementById('drawer-total');
     if (subtotal) subtotal.textContent = `S/ ${total}`;
@@ -1013,6 +1013,8 @@
     }
 
     /* Regla: con QR se pide a esa mesa; desde la web (sin QR) solo delivery. */
+    document.getElementById('drawer-titulo').textContent = mesaQR ? 'Comanda de Mesa' : 'Tu Pedido';
+    document.getElementById('carrito-fab')?.setAttribute('aria-label', mesaQR ? 'Abrir la comanda de la mesa' : 'Abrir tu pedido');
     const opcion = (valor) => form.querySelector(`input[name="modalidad"][value="${valor}"]`);
     const modoFijo = mesaQR ? 'insitu' : 'delivery';
     const leyenda = form.querySelector('.modos legend');
